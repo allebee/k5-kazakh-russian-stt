@@ -23,8 +23,6 @@
   - **Lexicon:** ҚҚС, ЖТС and КТС are possessive (poss3): "ҚҚС-да" → "қосылған құн салығында".
   - **Tests:** the review list `tests/data/abbrev_review.tsv` is regenerated, and its ab001..ab195 row order is checked. There are 27 new unit tests (151 in all); v0.2.1 adds 5 ITN tests (156 in all).
 
-> In this README, "the user" is the native-speaker reviewer who decided the reading conventions and approved the
-> reference cases.
 
 kk_tn turns written Kazakh into the words a TTS model should say:
 numbers with their case suffixes, years, dates, times, money, units, phone numbers, abbreviations and Latin words.
@@ -71,7 +69,7 @@ The pieces:
   - Abbreviations, each with an `expand | spell | word | keep` mode, a possessive flag and an izafet flag.
   - Latin words, units, months.
   - Russian count nouns: "5 тысяч" → пять тысяч.
-- **`config.py`:** every reading convention the user decides is a switch. The defaults follow the user's review of 2026-10-07:
+- **`config.py`:** every reading convention is a switch. The defaults follow the native-speaker review of 2026-10-07:
 
 | Setting | Default | Example |
 |---|---|---|
@@ -100,13 +98,13 @@ python3 -m pytest -q tests/test_units.py
   - 100 TTS cases;
   - 100 code-switch sentences, which must pass through unchanged.
 
-  All of them were approved by the user, with tn002 and the four x,5 rows corrected.
+  All of them were approved by the native-speaker reviewer, with tn002 and the four x,5 rows corrected.
 - **Comparison is lenient:** case, punctuation and hyphens are ignored.
 - **`tests/data/disputes.tsv`** lists cases where two approved cases contradict each other. The rule follows one and the report shows the other as a dispute, not a failure.
 - **`test_units.py`** covers the suffix engine, numbers, config switches and bare-acronym readings. It also checks that `tests/data/abbrev_review.tsv` matches the lexicon and keeps the row order of ab001..ab195.
 - **`acronym_evidence.py`** prints the CC-100 suffix evidence for each acronym. `--review` regenerates the review list.
 
-Current result: 345 cases, 345 pass (after the user's rulings of 2026-10-07). All 1,990 unique FLEURS kk sentences normalise with no digits left.
+Current result: 345 cases, 345 pass (after the reviewer's rulings of 2026-10-07). All 1,990 unique FLEURS kk sentences normalise with no digits left.
 
 ## Known limits (v0.2)
 - **Lexicons:** 195 abbreviations and 240 Latin words (stage 4).
@@ -140,7 +138,7 @@ inverse_normalize("ол екі мың жиырма төртінші жылы ү�
 - **Russian ITN** uses the same engine: cardinals in all common cases, ordinals with short endings ("на 3-м этаже", "2-й этаж"), "полтора/полторы", "с половиной", "целых … десятых", years "в 2024 году", dates "15 марта 2024 года", time "в 14:30", centuries "XXI век". Kazakh number words only count in utterances with Kazakh letters (әғқңөұүһі) or an unambiguous Kazakh number word (жиырма, отыз, елу, алпыс, жетпіс, сексен, алты, жеті), because "он" is also the Russian pronoun.
 - **Acronyms** come back uppercase: "ақш" → АҚШ, "ұбт ны" → ҰБТ-ны, "ақыш тың" → АҚШ-тың. Acronyms that are also words ("ақ", "бақ", "шок") are left alone.
 
-**Output style** (the user's decisions):
+**Output style** (reviewer's decisions):
 
 | Kind | Example |
 |---|---|
