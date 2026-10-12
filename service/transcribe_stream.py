@@ -20,7 +20,8 @@ ap.add_argument("--root", default=os.environ.get("K5_STT_MODEL_DIR"),
                      "this script; if that is not a model repo, the training-side layout under $K5_STT_ROOT is used)")
 ap.add_argument("--device", default="cpu")
 ap.add_argument("--chunk-ms", type=int, default=320, choices=[160, 320, 640, 1280])
-ap.add_argument("--lm", default="kkru", choices=["kkru", "kk", "ru", "none"])
+ap.add_argument("--lm", default="kkru", choices=["kkru", "kk", "ru", "beam", "none"],
+                help="KenLM for the final pass; beam = beam search without KenLM (recommended for live, segmented use; hotwords still work); none = greedy")
 ap.add_argument("--no-itn", action="store_true")
 ap.add_argument("--tentative", action="store_true", help="show the still-growing last word in partials")
 ap.add_argument("--realtime", action="store_true", help="pace a file at real time (stdin is always live)")

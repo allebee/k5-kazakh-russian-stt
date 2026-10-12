@@ -103,6 +103,11 @@ class TwoPass:
             import gigaam
             gigaam._CACHE_DIR = str(self.p["gigaam_cache"])
         self.dev = torch.device(device)
+        if self.dev.type == "cuda":
+            # cuDNN 9 JIT-compiles conv kernels for every new input shape (~160-200 ms each), and every streamed
+            # segment has a new length; PyTorch's native kernels are as fast for these small convs (final pass on a new
+            # length: 18-32 ms instead of 160-200 ms; cache-engine chunk: 14-17 ms instead of 65-73 ms). Process-wide.
+            torch.backends.cudnn.enabled = False
         self.cm = _load(self.p["partial"], self.dev)
         self.fm = _load(self.p["final"], self.dev)
         for m in (self.cm, self.fm):  # patch the module that defines each encoder (gigaam package or HF remote code)
@@ -114,8 +119,13 @@ class TwoPass:
         cpu = self.dev.type == "cpu"
         self.bf16_final, self.bf16_partials = cpu and bf16_final, cpu and bf16_partials
         self.eou = eou
+        self.lm = lm
         self.dec = None
-        if lm and lm != "none":
+        if lm == "beam":  # beam search without KenLM (hotwords still work): best for live, VAD-segmented decoding
+            from pyctcdecode import build_ctcdecoder
+            self.dec = build_ctcdecoder(self.vocab + [""])
+            self.beam_width = beam_width
+        elif lm and lm != "none":
             from pyctcdecode import build_ctcdecoder
             a, b = (json.load(open(self.p["lm_weights"])).get(lm) or [0.2, 0.0])
             uni = Path(self.p["lm_dir"]) / f"{lm}.unigrams.txt"

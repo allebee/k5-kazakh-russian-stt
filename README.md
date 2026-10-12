@@ -99,10 +99,12 @@ python service/transcribe_stream.py long_recording.wav --lm kkru | grep '"final"
 **Streaming** (two-pass, JSON lines on stdout):
 
 ```bash
-python service/transcribe_stream.py call.wav --chunk-ms 320 --lm kkru
-arecord -f S16_LE -r 16000 -c 1 | python service/transcribe_stream.py - --tentative       # live microphone
-python service/transcribe_stream.py call.wav --device cuda --chunk-ms 640
+python service/transcribe_stream.py call.wav --chunk-ms 320 --lm beam
+arecord -f S16_LE -r 16000 -c 1 | python service/transcribe_stream.py - --lm beam --tentative       # live microphone
+python service/transcribe_stream.py call.wav --device cuda --chunk-ms 640 --lm beam
 ```
+
+For **live, segmented use** pass `--lm beam` (beam search without KenLM; hotwords still work): on 100 simulated calls with a 0.4 s end-of-utterance pause the final WER is **10.3 vs 11.1** with KenLM. KenLM still helps on whole utterances (offline numbers above); on long recordings at the default 0.5 s pause the two are equal (9.12 vs 9.17).
 
 ```
 {"type": "partial", "seg": 0, "t": ..., "text": "...", "compute_ms": ...}
@@ -122,7 +124,7 @@ python service/transcribe_stream.py call.wav --hotwords-file names.txt          
 import sys; sys.path.insert(0, "service")
 from twopass import TwoPass, release_paths
 
-tp = TwoPass(paths=release_paths("k5stt"), device="cpu", chunk_ms=320, lm="kkru", hotwords=["Kaspi"])
+tp = TwoPass(paths=release_paths("k5stt"), device="cpu", chunk_ms=320, lm="beam", hotwords=["Kaspi"])  # live use
 for block in audio_blocks:              # float32 mono 16 kHz numpy arrays of any length
     for event in tp.feed(block):        # {"type": "partial" | "final", ...}
         print(event)
@@ -314,5 +316,5 @@ FLoRes-200 (NLLB Team, 2022); Golos (Karpov et al., Interspeech 2021); the SOVA 
 ```bash
 pip install -r requirements.txt
 huggingface-cli download alibiserikbay/k5-kazakh-russian-stt --local-dir k5stt
-python service/transcribe_stream.py --root k5stt call.wav --lm kkru --hotwords "Ерболат,Kaspi"
+python service/transcribe_stream.py --root k5stt call.wav --lm beam --hotwords "Ерболат,Kaspi"
 ```

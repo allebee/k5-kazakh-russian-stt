@@ -38,7 +38,7 @@ audio ─► VAD: Silero vad.onnx + AGC; speech prob > 0.5; start after 250 ms; 
 huggingface-cli download alibiserikbay/k5-kazakh-russian-stt --local-dir k5stt
 export K5_STT_MODEL_DIR=$PWD/k5stt
 
-python service/transcribe_stream.py call.wav --chunk-ms 320 --lm kkru
+python service/transcribe_stream.py call.wav --chunk-ms 320 --lm beam
 python service/transcribe_stream.py call.wav --hotwords "Ерболат,Kaspi,Шымкент" --hotword-weight 10
 arecord -f S16_LE -r 16000 -c 1 | python service/transcribe_stream.py - --tentative      # live microphone
 python service/selftest.py --calls 20 --manifests my_dev.jsonl                          # {"path": ..., "ref": ...} per line
@@ -52,7 +52,7 @@ Python:
 ```python
 import sys; sys.path.insert(0, "service")
 from twopass import TwoPass, release_paths
-tp = TwoPass(paths=release_paths("k5stt"), device="cpu", chunk_ms=320, lm="kkru", hotwords=["Kaspi"])
+tp = TwoPass(paths=release_paths("k5stt"), device="cpu", chunk_ms=320, lm="beam", hotwords=["Kaspi"])  # live use
 for block in blocks:                 # float32 mono 16 kHz numpy arrays, any length
     for ev in tp.feed(block):
         print(ev)
@@ -61,7 +61,11 @@ print(tp.flush())                    # end of stream
 
 Options worth knowing:
 
-- `--lm kkru|kk|ru|none` (dev-tuned α/β from `lm/lm_weights.json`), `--no-itn`, `--device cuda`, `--threads 4`.
+- `--lm kkru|kk|ru|beam|none`: KenLM with dev-tuned α/β from `lm/lm_weights.json`; `beam` = beam search without
+  KenLM (recommended for live, segmented use: 10.3 vs 11.1 final WER on 100 simulated calls at a 0.4 s pause; hotwords
+  still work); `none` = greedy. Also `--no-itn`, `--device cuda`, `--threads 4`.
+- On GPU, `TwoPass` disables cuDNN process-wide: cuDNN 9 compiles conv kernels for every new input length (~0.2 s per
+  streamed segment); PyTorch's native kernels are as fast here.
 - **Hotwords** (contextual biasing of the final pass, pyctcdecode): `--hotwords "a,b"` / `--hotwords-file names.txt`,
   `--hotword-weight 10` (default). In the API `TwoPass(hotwords=[...])` or `tp.set_hotwords([...], 10)`, changeable
   between segments. Words are normalized like the model output (lowercase, ё → е). Weight 20 over-biases.
