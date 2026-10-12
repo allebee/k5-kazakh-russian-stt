@@ -1,0 +1,41 @@
+K5 Kazakh-Russian STT (code)
+Copyright 2026 the k5-kazakh-russian-stt authors
+
+This repository contains source code only.
+
+1. Code in this repository (service/, eval/, benchmarks/, training/, scripts/) is licensed under the Apache License,
+   Version 2.0 (see LICENSE).
+
+2. kk_tn/ (Kazakh text normalization and inverse normalization) is licensed under the Apache License, Version 2.0.
+   It includes Kazakh cardinal and decimal number tables ported from numtow (https://github.com/gammban/numtow),
+   Copyright (c) 2022 gammban, under the MIT License; the full notice is in kk_tn/NOTICE.
+   kk_tn/tests/data/acronym_suffix_counts_cc100.tsv holds acronym + suffix counts computed from CC-100 Kazakh
+   (statistics only).
+
+3. Model weights are NOT part of this repository. The released weights (offline and streaming models) and KenLM files
+   are published at https://huggingface.co/alibiserikbay/k5-kazakh-russian-stt under the Creative Commons
+   Attribution-ShareAlike 4.0 International licence (CC BY-SA 4.0), because some training inputs are share-alike
+   (KSD: CC BY-SA 3.0; Golos: SberDevices public licence with attribution and conditions reserved; FLoRes-200 text in
+   FLEURS: CC BY-SA 4.0). The model repo also carries:
+   - modeling_gigaam.py: MIT, Copyright (c) 2024 GigaChat Team (ai-sage/GigaAM-Multilingual), modified so that the
+     pyannote import is optional;
+   - vad/vad.onnx: Silero VAD, MIT, Copyright (c) Silero Team (https://github.com/snakers4/silero-vad).
+
+4. Third-party software used by this code (not included, installed separately):
+   - GigaAM (https://github.com/salute-developers/GigaAM), MIT, Copyright (c) 2024 GigaChat Team. The base model is
+     GigaAM-Multilingual large_ctc (https://huggingface.co/ai-sage/GigaAM-Multilingual), MIT. service/streaming_patch.py
+     patches GigaAM's Conformer classes at runtime, and service/cache_engine.py and service/batch_engine.py re-implement
+     its Conformer layer forward pass for cached streaming; no GigaAM source file is included.
+   - KenLM (https://github.com/kpu/kenlm), LGPL 2.1+, used as a tool and Python binding.
+   - pyctcdecode, PyTorch, torchaudio, transformers, ONNX Runtime and the other packages in requirements*.txt, under
+     their own licences.
+
+5. Training data is NOT part of this repository. The corpora used for training, augmentation and the language models,
+   their rights holders, licences and our changes are listed in README.md ("Licences and attribution") and in
+   docs/LICENSES_DATA.md:
+   ISSAI Kazakh Speech Corpus 2 (CC BY 4.0, DOI 10.48342/m90y-aj02); Kazakh Speech Dataset / KSD, Al-Farabi Kazakh
+   National University (CC BY-SA 3.0); Golos, SberDevices / Salute Developers (SberDevices public licence with
+   attribution and conditions reserved; provided as is, without warranty); FLEURS, Google (CC BY 4.0; FLoRes-200
+   sentences CC BY-SA 4.0); SOVA RuDevices, Virtual Assistant, LLC (CC BY 4.0); Russian LibriSpeech, from LibriVox
+   (public domain in the US); RIRS_NOISES (Apache-2.0); MUSAN (CC BY 4.0); CC-100 (no licence grant by the corpus
+   makers; Common Crawl Terms of Use apply).

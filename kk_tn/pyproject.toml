@@ -1,0 +1,17 @@
+[project]
+name = "kk_tn"
+version = "0.2.2"
+description = "Kazakh text normalization (written → spoken, for TTS) and inverse normalization (spoken → written, for STT)"
+license = { text = "Apache-2.0" }
+requires-python = ">=3.10"
+dependencies = []
+
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["kk_tn"]
+
+[tool.setuptools.package-data]
+kk_tn = ["data/*.tsv"]

@@ -1,0 +1,11 @@
+# Training and data preparation (on top of GigaAM's own training extras):
+#   git clone https://github.com/salute-developers/GigaAM && pip install -e "GigaAM[train]"
+# System tools: ffmpeg (with libgsm and libopus), xz, curl; KenLM's lmplz + build_binary for lm/build_lm.sh.
+torch
+torchaudio
+numpy
+soundfile
+jiwer
+pyctcdecode
+kenlm
+onnxruntime

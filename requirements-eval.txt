@@ -1,0 +1,7 @@
+# Evaluation (eval/) and benchmarks (benchmarks/), on top of requirements.txt.
+-r requirements.txt
+jiwer
+# Loading training .ckpt checkpoints (eval_many.py, lm_eval.py, stream_engine_sim.py, ...) needs the gigaam package:
+#   pip install git+https://github.com/salute-developers/GigaAM
+# Meta omniASR (benchmarks/bench_omni.py) needs its own environment: omnilingual-asr pins its own torch version.
+# System tool: ffmpeg (with libgsm and libopus) for eval/prep_eval.py.

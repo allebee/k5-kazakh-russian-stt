@@ -1,0 +1,72 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+
+# environments and secrets
+.venv*/
+venv/
+env/
+.env
+.env.*
+*.token
+.netrc
+
+# audio
+*.wav
+*.flac
+*.mp3
+*.ogg
+*.opus
+*.gsm
+*.m4a
+*.pcm
+
+# checkpoints, model and LM files, arrays
+*.ckpt
+*.pt
+*.pth
+*.safetensors
+*.onnx
+*.bin
+*.arpa
+*.npz
+*.npy
+*.tar
+*.tar.gz
+*.tgz
+*.zip
+*.xz
+
+# workspace directories (when $K5_STT_ROOT is the repo itself) and model downloads
+/data/
+/manifests/
+/runs/
+/lm/
+/models/
+/logs/
+/tmp/
+/GigaAM/
+/k5stt/
+/hf_release/
+/.gigaam-cache/
+/.hf/
+/eval/manifests/
+/eval/hyps/
+/eval/logits/
+/eval/stream/
+*.part
+*.log
+selftest_result.json
+
+# OS / editors
+.DS_Store
+.idea/
+.vscode/

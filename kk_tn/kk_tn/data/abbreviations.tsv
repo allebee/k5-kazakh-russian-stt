@@ -1,0 +1,213 @@
+# abbr	expansion	mode	poss3	izafet	context	spell	note
+# mode (bare form): expand | spell (letter names) | word (sound abbreviation, read as one word) | keep. poss3=1: the expansion ends in a 3rd-person
+# possessive, so case suffixes take the pronominal n (АҚШ-қа → Штаттарына). izafet=1: before a
+# possessed noun the expansion takes the genitive (ҚР Президенті → Республикасының Президенті).
+# context: any | after_capword (Алматы қ.) | before_number.
+# mode is the reading of the BARE form; with a suffix an entry is always expanded (user rule).
+# spell: explicit reading for spell/word modes; otherwise letters: consonant+ы (к, г → кі, гі), vowels as themselves.
+# note: evidence for the chosen mode. Acronyms (2026-10-07): CC-100 case suffixes written after the acronym (АҚШ-тың),
+# consonant-final vs vowel-final allomorphs (method and counts: tests/acronym_evidence.py). word if the acronym
+# has a vowel and >= 70% of >= 10 counted suffixes are consonant-final; otherwise letters. User rulings override;
+# well-known state, region and agency names stay expanded (formal default, keeps the izafet genitive).
+ҚР	Қазақстан Республикасы	expand	1	1	any		user ruling: bare form expanded (ҚР Президенті → Қазақстан Республикасының Президенті). CC-100: cons-final 428, vowel-final 13972 (3%), neutral 6442 of 25009 suffixed → evidence alone: letters (no vowel)
+АҚШ	Америка Құрама Штаттары	word	1	1	any	ақыш	user ruling: word ақыш, epenthetic ы; transcripts spell "ақыш". CC-100: cons-final 58560, vowel-final 849 (99%) of 61749 suffixed → word
+БҰҰ	Біріккен Ұлттар Ұйымы	spell	1	1	any		user ruling: letters; needs ear check. CC-100: ends in a vowel either way, suffixes cannot decide (vowel-type 13083, cons-type 40 of 14446 suffixed) → letters
+ТМД	Тәуелсіз Мемлекеттер Достастығы	spell	1	1	any		user ruling: letters (ТМД елдері → ты-мы-ды елдері). CC-100: cons-final 8, vowel-final 5286 (0%) of 5579 suffixed → letters
+ЕАЭО	Еуразиялық экономикалық одақ	spell	0	0	any		user ruling: letters; needs ear check. CC-100: ends in a vowel either way, suffixes cannot decide (vowel-type 2212, cons-type 116 of 2460 suffixed) → letters
+ЕО	Еуропалық Одақ	spell	0	0	any		user ruling: letters; needs ear check. CC-100: ends in a vowel either way, suffixes cannot decide (vowel-type 1412, cons-type 385 of 2086 suffixed) → letters
+РФ	Ресей Федерациясы	expand	1	1	any		expanded (formal default; letters plausible, ear check). CC-100: cons-final 34, vowel-final 798 (4%) of 968 suffixed
+ҚХР	Қытай Халық Республикасы	expand	1	1	any		expanded (formal default; letters plausible, ear check). CC-100: cons-final 649, vowel-final 595 (52%), neutral 1099 of 2873 suffixed
+ІІМ	Ішкі істер министрлігі	expand	1	1	any		expanded (formal default; letters plausible, ear check). CC-100: cons-final 6, vowel-final 4 (60%), neutral 1604 of 1844 suffixed
+ҰҚК	Ұлттық қауіпсіздік комитеті	expand	1	1	any		expanded (formal default; letters plausible, ear check). CC-100: cons-final 10, vowel-final 1093 (1%) of 1233 suffixed
+ТЖМ	Төтенше жағдайлар министрлігі	expand	1	1	any		expanded (formal default; letters plausible, ear check). CC-100: cons-final 0, vowel-final 5 (0%), neutral 160 of 190 suffixed
+ДДСҰ	Дүниежүзілік денсаулық сақтау ұйымы	expand	1	1	any		expanded (formal default; letters plausible, ear check). CC-100: ends in a vowel either way, suffixes cannot decide (vowel-type 101, cons-type 0 of 114 suffixed)
+ЖІӨ	жалпы ішкі өнім	expand	0	0	any		expanded (formal default; letters plausible, ear check). CC-100: ends in a vowel either way, suffixes cannot decide (vowel-type 2575, cons-type 104 of 3036 suffixed)
+БАҚ	бұқаралық ақпарат құралдары	word	1	0	any	бақ	user rule example: word бақ. CC-100: cons-final 12465, vowel-final 1315 (90%) of 18234 suffixed → word
+ЖОО	жоғары оқу орны	spell	1	0	any		user ruling: letters; needs ear check. CC-100: ends in a vowel either way, suffixes cannot decide (vowel-type 11747, cons-type 101 of 17520 suffixed) → letters
+ЖЭС	жылу электр станциясы	word	1	0	any	жэс	CC-100: cons-final 255, vowel-final 74 (78%) of 562 suffixed → word (was expand)
+ШҚО	Шығыс Қазақстан облысы	expand	1	1	any		expanded (formal default; letters plausible, ear check). CC-100: ends in a vowel either way, suffixes cannot decide (vowel-type 9034, cons-type 1 of 9116 suffixed)
+БҚО	Батыс Қазақстан облысы	expand	1	1	any		expanded (formal default; letters plausible, ear check). CC-100: ends in a vowel either way, suffixes cannot decide (vowel-type 4761, cons-type 0 of 4806 suffixed)
+СҚО	Солтүстік Қазақстан облысы	expand	1	1	any		expanded (formal default; letters plausible, ear check). CC-100: ends in a vowel either way, suffixes cannot decide (vowel-type 2602, cons-type 0 of 2642 suffixed)
+ОҚО	Оңтүстік Қазақстан облысы	expand	1	1	any		expanded (formal default; letters plausible, ear check). CC-100: ends in a vowel either way, suffixes cannot decide (vowel-type 13972, cons-type 4 of 14192 suffixed)
+ЕҰУ	Еуразия ұлттық университеті	expand	1	1	any		expanded (formal default; letters plausible, ear check). CC-100: ends in у either way, suffixes cannot decide (2442 suffixed)
+ҰБТ	ұлттық бірыңғай тестілеу	spell	0	0	any		user ruling: letters; transcripts "ұбт ны". CC-100: cons-final 261, vowel-final 16857 (2%) of 17518 suffixed → letters
+ЖШС	жауапкершілігі шектеулі серіктестік	expand	0	0	any		user ruling: bare form expanded. CC-100: cons-final 581, vowel-final 15269 (4%) of 25969 suffixed → evidence alone: letters (no vowel)
+АҚ	акционерлік қоғам	word	0	0	any	ақ	resmihat.kz / user rule example: word ақ, kept. CC-100: cons-final 2322, vowel-final 15123 (13%) of 22839 suffixed; evidence disagrees: the expansion қоғам ends in м, so its -ның/-да/-ға/-нан look vowel-final
+ЖК	жеке кәсіпкер	spell	0	0	any		CC-100: cons-final 10, vowel-final 228 (4%) of 398 suffixed → letters, no vowel
+ЖСН	жеке сәйкестендіру нөмірі	spell	1	0	any		CC-100: cons-final 168, vowel-final 28 (86%), neutral 97 of 543 suffixed → letters, no vowel
+БСН	бизнес сәйкестендіру нөмірі	spell	1	0	any		CC-100: cons-final 8, vowel-final 3 (73%), neutral 13 of 74 suffixed → letters, no vowel
+ҚазҰУ	Қазақ ұлттық университеті	keep	1	1	any
+ЭКСПО	ЭКСПО	keep	0	0	any		read as written (international name). CC-100: ends in a vowel either way, suffixes cannot decide (vowel-type 2559, cons-type 1 of 2813 suffixed)
+НАТО	НАТО	keep	0	0	any		read as written (international name). CC-100: ends in a vowel either way, suffixes cannot decide (vowel-type 2452, cons-type 0 of 2693 suffixed)
+ЮНЕСКО	ЮНЕСКО	keep	0	0	any		read as written (international name). CC-100: ends in a vowel either way, suffixes cannot decide (vowel-type 4089, cons-type 0 of 4229 suffixed)
+т.б.	тағы басқа	expand	0	0	any
+т.с.с.	тағы сол сияқты	expand	0	0	any
+т.с.	тағы сол	expand	0	0	any
+ж.б.	және басқа	expand	0	0	any
+б.з.б.	біздің заманымызға дейін	expand	0	0	any
+б.з.д.	біздің заманымызға дейін	expand	0	0	any
+б.д.д.	біздің дәуірімізге дейін	expand	0	0	any
+б.д.	біздің дәуіріміз	expand	0	0	any
+б.з.	біздің заманымыз	expand	0	0	any
+мыс.	мысалы	expand	0	0	any
+т.е.	то есть	expand	0	0	any
+т.к.	так как	expand	0	0	any
+и т.д.	и так далее	expand	0	0	any
+проф.	профессор	expand	0	0	any
+акад.	академик	expand	0	0	any
+доц.	доцент	expand	0	0	any
+д-р	доктор	expand	0	0	any
+тел.	телефон	expand	0	0	any
+қ.	қаласы	expand	0	0	after_capword
+обл.	облысы	expand	0	0	after_capword
+ауд.	ауданы	expand	0	0	after_capword
+ау.	ауылы	expand	0	0	after_capword
+көш.	көшесі	expand	0	0	after_capword
+даңғ.	даңғылы	expand	0	0	after_capword
+пр.	проспектісі	expand	0	0	after_capword
+# ---- stage 4 additions (2026-10-07). Bare-form modes of acronyms from CC-100 evidence (note); review: tests/data/abbrev_review.tsv
+# ministries and state bodies
+ДСМ	Денсаулық сақтау министрлігі	spell	1	1	any		CC-100: cons-final 1, vowel-final 0 (100%), neutral 163 of 188 suffixed → letters, no vowel
+ОАМ	Оқу-ағарту министрлігі	spell	1	1	any		CC-100: cons-final 0, vowel-final 1 (0%) of 1 suffixed → letters, under 10 counted
+ҒЖБМ	Ғылым және жоғары білім министрлігі	spell	1	1	any		CC-100: no suffixed forms → letters
+БҒМ	Білім және ғылым министрлігі	spell	1	1	any		CC-100: cons-final 1, vowel-final 0 (100%), neutral 403 of 562 suffixed → letters, no vowel
+СІМ	Сыртқы істер министрлігі	word	1	1	any	сім	user rule example: word сім, kept. CC-100: cons-final 5, vowel-final 1 (83%), neutral 1737 of 2012 suffixed; after м, -нің/-де/-ге are neutral; too few counted tokens to decide
+АШМ	Ауыл шаруашылығы министрлігі	spell	1	1	any		CC-100: cons-final 1, vowel-final 0 (100%), neutral 263 of 311 suffixed → letters, under 10 counted
+ЕХӘҚМ	Еңбек және халықты әлеуметтік қорғау министрлігі	spell	1	1	any		CC-100: cons-final 0, vowel-final 0, neutral 21 of 29 suffixed → letters, under 10 counted
+ИИДМ	Индустрия және инфрақұрылымдық даму министрлігі	spell	1	1	any		CC-100: no suffixed forms → letters
+ЦДИАӨМ	Цифрлық даму, инновациялар және аэроғарыш өнеркәсібі министрлігі	spell	1	1	any		CC-100: no suffixed forms → letters
+МСМ	Мәдениет және спорт министрлігі	spell	1	1	any		CC-100: cons-final 0, vowel-final 0, neutral 63 of 80 suffixed → letters, no vowel
+ЭТРМ	Экология және табиғи ресурстар министрлігі	spell	1	1	any		CC-100: no suffixed forms → letters
+ҰЭМ	Ұлттық экономика министрлігі	spell	1	1	any		CC-100: cons-final 0, vowel-final 0, neutral 57 of 79 suffixed → letters, under 10 counted
+СЖРА	Стратегиялық жоспарлау және реформалар агенттігі	spell	1	1	any		CC-100: ends in a vowel either way, suffixes cannot decide (vowel-type 1, cons-type 0 of 1 suffixed) → letters
+ОСК	Орталық сайлау комиссиясы	spell	1	1	any		CC-100: cons-final 1, vowel-final 211 (0%) of 251 suffixed → letters
+ЖС	Жоғарғы Сот	spell	0	0	any		CC-100: cons-final 0, vowel-final 4 (0%) of 6 suffixed → letters, no vowel
+КС	Конституциялық Сот	spell	0	0	any		CC-100: cons-final 13, vowel-final 28 (32%) of 56 suffixed → letters, no vowel
+БП	Бас прокуратура	spell	0	0	any		CC-100: cons-final 0, vowel-final 14 (0%) of 23 suffixed → letters, no vowel
+ҰБ	Ұлттық Банк	spell	0	0	any		CC-100: cons-final 34, vowel-final 103 (25%) of 167 suffixed → letters
+ЖАО	жергілікті атқарушы органдар	spell	0	0	any		CC-100: ends in a vowel either way, suffixes cannot decide (vowel-type 632, cons-type 11 of 814 suffixed) → letters
+ҚК	Қылмыстық кодекс	spell	0	0	any		CC-100: cons-final 1496, vowel-final 3115 (32%) of 5110 suffixed → letters, no vowel
+АК	Азаматтық кодекс	spell	0	0	any		CC-100: cons-final 787, vowel-final 1350 (37%) of 2419 suffixed → letters
+СК	Салық кодексі	spell	1	0	any		CC-100: cons-final 5, vowel-final 94 (5%) of 160 suffixed → letters, no vowel
+ӘҚБТК	Әкімшілік құқық бұзушылық туралы кодекс	spell	0	0	any		CC-100: cons-final 0, vowel-final 4 (0%) of 5 suffixed → letters, under 10 counted
+ХҚКО	халыққа қызмет көрсету орталығы	spell	1	0	any		CC-100: ends in a vowel either way, suffixes cannot decide (vowel-type 2952, cons-type 8 of 4300 suffixed) → letters
+МАИ	мемлекеттік автомобиль инспекциясы	spell	1	0	any		CC-100: ends in и either way, suffixes cannot decide (64 suffixed) → letters
+ТЖ	төтенше жағдай	spell	0	0	any		CC-100: cons-final 95, vowel-final 94 (50%), neutral 103 of 365 suffixed → letters, no vowel
+ҰОС	Ұлы Отан соғысы	spell	1	1	any		CC-100: cons-final 33, vowel-final 275 (11%) of 427 suffixed → letters
+КСРО	Кеңестік Социалистік Республикалар Одағы	spell	1	1	any		CC-100: ends in a vowel either way, suffixes cannot decide (vowel-type 10610, cons-type 5 of 11115 suffixed) → letters
+ҚазКСР	Қазақ Кеңестік Социалистік Республикасы	keep	1	1	any
+КССР	Кеңестік Социалистік Республикасы	spell	1	1	any		CC-100: cons-final 6, vowel-final 11 (35%), neutral 15 of 43 suffixed → letters: no vowel, cannot be read as written (was keep)
+# international
+ЕҚЫҰ	Еуропадағы қауіпсіздік және ынтымақтастық ұйымы	spell	1	1	any		CC-100: ends in a vowel either way, suffixes cannot decide (vowel-type 3300, cons-type 25 of 3734 suffixed) → letters
+ШЫҰ	Шанхай ынтымақтастық ұйымы	spell	1	1	any		CC-100: ends in a vowel either way, suffixes cannot decide (vowel-type 1670, cons-type 4 of 1861 suffixed) → letters
+ҰҚШҰ	Ұжымдық қауіпсіздік туралы шарт ұйымы	spell	1	1	any		CC-100: ends in a vowel either way, suffixes cannot decide (vowel-type 659, cons-type 4 of 680 suffixed) → letters
+ХВҚ	Халықаралық валюта қоры	spell	1	1	any		CC-100: cons-final 16, vowel-final 282 (5%) of 404 suffixed → letters, no vowel
+ДСҰ	Дүниежүзілік сауда ұйымы	spell	1	1	any		CC-100: ends in a vowel either way, suffixes cannot decide (vowel-type 4103, cons-type 5 of 4439 suffixed) → letters
+ЕҚДБ	Еуропа қайта құру және даму банкі	spell	1	1	any		CC-100: cons-final 0, vowel-final 129 (0%) of 170 suffixed → letters
+АДБ	Азия даму банкі	spell	1	1	any		CC-100: cons-final 0, vowel-final 182 (0%) of 213 suffixed → letters
+ОАР	Оңтүстік Африка Республикасы	word	1	1	any	оар	CC-100: cons-final 71, vowel-final 21 (77%), neutral 182 of 308 suffixed → word (was spell)
+БАӘ	Біріккен Араб Әмірліктері	spell	1	1	any		CC-100: ends in a vowel either way, suffixes cannot decide (vowel-type 1120, cons-type 0 of 1302 suffixed) → letters
+КХДР	Корей Халықтық Демократиялық Республикасы	spell	1	1	any		CC-100: cons-final 213, vowel-final 55 (79%), neutral 187 of 513 suffixed → letters, no vowel
+ГФР	Германия Федеративтік Республикасы	spell	1	1	any		CC-100: cons-final 218, vowel-final 78 (74%), neutral 569 of 952 suffixed → letters, no vowel
+ОПЕК	ОПЕК	keep	0	0	any		read as written. CC-100: cons-final 355, vowel-final 1 (100%) of 383 suffixed → word reading confirmed
+ФИФА	ФИФА	keep	0	0	any		read as written (international name). CC-100: ends in a vowel either way, suffixes cannot decide (vowel-type 578, cons-type 0 of 593 suffixed)
+УЕФА	УЕФА	keep	0	0	any		read as written (international name). CC-100: ends in a vowel either way, suffixes cannot decide (vowel-type 629, cons-type 0 of 636 suffixed)
+ЮНИСЕФ	ЮНИСЕФ	keep	0	0	any		read as written. CC-100: cons-final 309, vowel-final 0 (100%) of 365 suffixed → word reading confirmed
+НАСА	НАСА	keep	0	0	any		read as written (international name). CC-100: ends in a vowel either way, suffixes cannot decide (vowel-type 70, cons-type 0 of 73 suffixed)
+АСЕАН	АСЕАН	keep	0	0	any		read as written. CC-100: cons-final 5, vowel-final 0 (100%), neutral 75 of 90 suffixed: too few counted tokens to decide
+# education and science
+ҰҒА	Ұлттық ғылым академиясы	spell	1	1	any		CC-100: ends in a vowel either way, suffixes cannot decide (vowel-type 683, cons-type 0 of 709 suffixed) → letters
+ҒЗИ	ғылыми-зерттеу институты	spell	1	0	any		CC-100: ends in и either way, suffixes cannot decide (664 suffixed) → letters
+ТжКБ	техникалық және кәсіптік білім	spell	0	0	any
+НЗМ	Назарбаев Зияткерлік мектептері	spell	1	1	any		CC-100: cons-final 1, vowel-final 0 (100%), neutral 142 of 193 suffixed → letters, no vowel
+ОЖСБ	оқушылардың жетістіктерін сырттай бағалау	spell	0	0	any		CC-100: cons-final 8, vowel-final 1164 (1%) of 1190 suffixed → letters
+МЖМБС	мемлекеттік жалпыға міндетті білім беру стандарты	spell	1	0	any		CC-100: cons-final 13, vowel-final 37 (26%) of 76 suffixed → letters, no vowel
+ҚазҰТЗУ	Қазақ ұлттық техникалық зерттеу университеті	keep	1	1	any
+ҚазҰПУ	Қазақ ұлттық педагогикалық университеті	keep	1	1	any
+ҚарМУ	Қарағанды мемлекеттік университеті	keep	1	1	any
+ҚазҰАУ	Қазақ ұлттық аграрлық университеті	keep	1	1	any
+ҚазҰМУ	Қазақ ұлттық медицина университеті	keep	1	1	any
+т.ғ.д.	техника ғылымдарының докторы	expand	0	0	any
+т.ғ.к.	техника ғылымдарының кандидаты	expand	0	0	any
+ф.ғ.д.	филология ғылымдарының докторы	expand	0	0	any
+ф.ғ.к.	филология ғылымдарының кандидаты	expand	0	0	any
+э.ғ.д.	экономика ғылымдарының докторы	expand	0	0	any
+э.ғ.к.	экономика ғылымдарының кандидаты	expand	0	0	any
+з.ғ.д.	заң ғылымдарының докторы	expand	0	0	any
+з.ғ.к.	заң ғылымдарының кандидаты	expand	0	0	any
+п.ғ.д.	педагогика ғылымдарының докторы	expand	0	0	any
+п.ғ.к.	педагогика ғылымдарының кандидаты	expand	0	0	any
+м.ғ.д.	медицина ғылымдарының докторы	expand	0	0	any
+м.ғ.к.	медицина ғылымдарының кандидаты	expand	0	0	any
+х.ғ.д.	химия ғылымдарының докторы	expand	0	0	any
+б.ғ.д.	биология ғылымдарының докторы	expand	0	0	any
+ф.-м.ғ.д.	физика-математика ғылымдарының докторы	expand	0	0	any
+ф.-м.ғ.к.	физика-математика ғылымдарының кандидаты	expand	0	0	any
+# economy, business, everyday
+ҚҚС	қосылған құн салығы	spell	1	0	any		CC-100: cons-final 301, vowel-final 343 (47%) of 1819 suffixed → letters, no vowel
+ЖТС	жеке табыс салығы	spell	1	0	any		CC-100: cons-final 11, vowel-final 10 (52%) of 28 suffixed → letters, no vowel
+КТС	корпоративтік табыс салығы	spell	1	0	any		CC-100: cons-final 21, vowel-final 3 (88%) of 26 suffixed → letters, no vowel
+АЕК	айлық есептік көрсеткіш	word	0	0	any	аек	CC-100: cons-final 845, vowel-final 134 (86%) of 1061 suffixed → word (was spell); needs ear check: the expansion көрсеткіш takes the same -тен/-ке/-ті/-тің
+ЕТЖ	ең төменгі жалақы	spell	0	0	any		CC-100: cons-final 0, vowel-final 17 (0%), neutral 16 of 33 suffixed → letters
+МӘМС	міндетті әлеуметтік медициналық сақтандыру	word	0	0	any	мәміс	CC-100: cons-final 201, vowel-final 75 (73%) of 320 suffixed → word (was spell); reading мәміс (epenthetic і; or мәмс), needs ear check
+БЖЗҚ	Бірыңғай жинақтаушы зейнетақы қоры	spell	1	1	any		CC-100: cons-final 4, vowel-final 3793 (0%) of 3985 suffixed → letters, no vowel
+ЭЦҚ	электрондық цифрлық қолтаңба	spell	0	0	any		CC-100: cons-final 0, vowel-final 409 (0%) of 2015 suffixed → letters
+ЖКО	жол-көлік оқиғасы	spell	1	0	any		CC-100: ends in a vowel either way, suffixes cannot decide (vowel-type 277, cons-type 0 of 343 suffixed) → letters
+ЖЖМ	жанар-жағармай материалдары	spell	1	0	any		CC-100: cons-final 17, vowel-final 9 (65%), neutral 40 of 91 suffixed → letters, no vowel
+ЖЭО	жылу электр орталығы	spell	1	0	any		CC-100: ends in a vowel either way, suffixes cannot decide (vowel-type 349, cons-type 4 of 496 suffixed) → letters
+АЭС	атом электр станциясы	spell	1	0	any		CC-100: cons-final 264, vowel-final 128 (67%) of 802 suffixed → letters, borderline; needs ear check
+ГЭС	гидроэлектр станциясы	spell	1	0	any		CC-100: cons-final 86, vowel-final 62 (58%) of 683 suffixed → letters, borderline; needs ear check
+СЭС	санитарлық-эпидемиологиялық станция	spell	0	0	any		CC-100: cons-final 130, vowel-final 71 (65%) of 620 suffixed → letters, borderline; needs ear check
+ҚТЖ	Қазақстан темір жолы	spell	1	1	any		CC-100: cons-final 0, vowel-final 121 (0%), neutral 81 of 256 suffixed → letters, no vowel
+МКК	мемлекеттік коммуналдық кәсіпорын	spell	0	0	any		CC-100: cons-final 0, vowel-final 476 (0%) of 639 suffixed → letters, no vowel
+ШЖҚ	шаруашылық жүргізу құқығы	spell	1	0	any		CC-100: cons-final 0, vowel-final 83 (0%) of 181 suffixed → letters, no vowel
+ШҚ	шаруа қожалығы	spell	1	0	any		CC-100: cons-final 1, vowel-final 157 (1%) of 252 suffixed → letters, no vowel
+# health
+АИТВ	адамның иммун тапшылығы вирусы	spell	1	0	any		CC-100: cons-final 26, vowel-final 1046 (2%) of 2845 suffixed → letters
+ЖИТС	жұре пайда болған иммун тапшылығы синдромы	keep	1	0	any		read as written. CC-100: cons-final 1622, vowel-final 60 (96%) of 2339 suffixed → word reading confirmed
+КТ	компьютерлік томография	spell	0	0	any		CC-100: cons-final 2, vowel-final 555 (0%) of 744 suffixed → letters, no vowel
+МРТ	магниттік-резонанстық томография	spell	0	0	any		CC-100: cons-final 3, vowel-final 106 (3%) of 212 suffixed → letters, no vowel
+ЭКГ	электрокардиограмма	spell	0	0	any		CC-100: cons-final 3, vowel-final 313 (1%) of 395 suffixed → letters
+ЖРВИ	жедел респираторлық вирустық инфекция	spell	0	0	any		CC-100: ends in и either way, suffixes cannot decide (298 suffixed) → letters: жрви cannot be read as written (was keep)
+# dotted and short forms
+ж.т.б.	және тағы басқа	expand	0	0	any
+т.с.с.с.	тағы сол сияқтылар	expand	0	0	any
+м.а.	міндетін атқарушы	expand	0	0	any
+ш.а.	шағын ауданы	expand	0	0	after_capword
+кент.	кенті	expand	0	0	after_capword
+ш.	шамамен	expand	0	0	before_number
+шам.	шамамен	expand	0	0	any
+жыл.	жылы	expand	0	0	any
+мөлш.	мөлшермен	expand	0	0	any
+қаз.	қазақша	expand	0	0	any
+орыс.	орысша	expand	0	0	any
+ағыл.	ағылшынша	expand	0	0	any
+ред.	редактор	expand	0	0	any
+құраст.	құрастырған	expand	0	0	any
+ІІД	Ішкі істер департаменті	spell	1	1	any		CC-100: cons-final 17, vowel-final 2407 (1%) of 2852 suffixed → letters
+ПД	Полиция департаменті	spell	1	1	any		CC-100: cons-final 0, vowel-final 14 (0%) of 18 suffixed → letters, no vowel
+ТЖД	Төтенше жағдайлар департаменті	spell	1	1	any		CC-100: cons-final 0, vowel-final 654 (0%) of 717 suffixed → letters, no vowel
+ӘКК	әлеуметтік-кәсіпкерлік корпорациясы	spell	1	1	any		CC-100: cons-final 10, vowel-final 232 (4%) of 371 suffixed → letters
+ҚДБ	Қазақстанның Даму Банкі	spell	1	1	any		CC-100: cons-final 0, vowel-final 56 (0%) of 68 suffixed → letters, no vowel
+ҚМГ	ҚазМұнайГаз	spell	0	0	any		CC-100: cons-final 7, vowel-final 138 (5%) of 154 suffixed → letters, no vowel
+ТШО	Теңізшевройл	spell	0	0	any		CC-100: ends in a vowel either way, suffixes cannot decide (vowel-type 452, cons-type 0 of 472 suffixed) → letters
+АӨК	агроөнеркәсіптік кешен	spell	0	0	any		CC-100: cons-final 810, vowel-final 980 (45%) of 2404 suffixed → letters
+ШОБ	шағын және орта бизнес	word	0	0	any	шоб	CC-100: cons-final 651, vowel-final 15 (98%) of 694 suffixed → word (was spell)
+ШОК	шағын және орта кәсіпкерлік	word	0	0	any	шок	CC-100: cons-final 89, vowel-final 0 (100%) of 96 suffixed → word (was spell)
+ТАСС	ТАСС	keep	0	0	any		read as written. CC-100: cons-final 119, vowel-final 2 (98%) of 122 suffixed → word reading confirmed
+МЕМСТ	МЕМСТ	keep	0	0	any		read as written. CC-100: cons-final 23, vowel-final 11 (68%) of 43 suffixed, below 70%; needs ear check
+мемл.	мемлекеттік	expand	0	0	any
+оқыт.	оқытушы	expand	0	0	any
+т.п.	тому подобное	expand	0	0	any
+и т.п.	и тому подобное	expand	0	0	any
+т.н.	так называемый	expand	0	0	any
+т.д.	так далее	expand	0	0	any
+қ-сы	қаласы	expand	0	0	after_capword
+ауд-ы	ауданы	expand	0	0	after_capword
+обл-ы	облысы	expand	0	0	after_capword
+көш-сі	көшесі	expand	0	0	after_capword
+даң-ы	даңғылы	expand	0	0	after_capword
+ш.ауд.	шағын ауданы	expand	0	0	after_capword
+ЖОБ	жалпы орта білім	spell	0	0	any		CC-100: cons-final 3, vowel-final 9 (25%) of 15 suffixed → letters
+ТҮКШ	тұрғын үй-коммуналдық шаруашылық	spell	0	0	any		CC-100: cons-final 20, vowel-final 12 (62%) of 38 suffixed → letters, borderline; needs ear check
+ПИК	пәтер иелерінің кооперативі	spell	1	0	any		CC-100: cons-final 247, vowel-final 116 (68%) of 752 suffixed → letters, borderline; needs ear check

@@ -1,0 +1,16 @@
+# Inference and the two-pass streaming service (service/), with the released Hugging Face model.
+# The release was tested in a clean environment with torch 2.14 (CPU) and transformers 5.19 (2026-10-08).
+torch
+torchaudio
+transformers
+safetensors
+huggingface_hub
+hydra-core
+omegaconf
+sentencepiece
+numpy
+scipy
+soundfile
+onnxruntime
+pyctcdecode
+kenlm
