@@ -71,7 +71,7 @@ CIs and more tables: [`docs/results.md`](docs/results.md).
 ## Quick start
 
 ```bash
-git clone <this repository> k5-kazakh-russian-stt && cd k5-kazakh-russian-stt
+git clone https://github.com/allebee/k5-kazakh-russian-stt.git && cd k5-kazakh-russian-stt
 pip install -r requirements.txt
 pip install -e kk_tn                       # optional: kk_tn as a package (the service also finds it on its own)
 
@@ -275,7 +275,7 @@ None of these inputs is non-commercial. No dataset, audio, checkpoint or LM file
 ```bibtex
 @misc{k5_kazakh_russian_stt_2026,
   title        = {{K5} {Kazakh--Russian} {STT}: two-pass streaming speech recognition for Kazakh, Russian and code-switched speech},
-  author       = {{alibiserikbay}},
+  author       = {Serikbay, Alibi},
   year         = {2026},
   howpublished = {\url{https://huggingface.co/alibiserikbay/k5-kazakh-russian-stt}},
   note         = {600M Conformer-CTC fine-tuned from GigaAM-Multilingual; code: Apache-2.0, weights: CC BY-SA 4.0}
