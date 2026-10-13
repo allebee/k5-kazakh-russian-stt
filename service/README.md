@@ -1,7 +1,8 @@
 # Two-pass streaming STT service (Kazakh, Russian, mixed kk/ru)
 
 The same code as `deploy/` in the Hugging Face model repo
-[`alibiserikbay/k5-kazakh-russian-stt`](https://huggingface.co/alibiserikbay/k5-kazakh-russian-stt).
+[`alibiserikbay/k5-kazakh-russian-stt`](https://huggingface.co/alibiserikbay/k5-kazakh-russian-stt), plus
+`twopass_stream.py` (the `StreamSession` voice-dialogue interface), which is only here.
 
 ## Pipeline
 
@@ -30,6 +31,7 @@ audio ─► VAD: Silero vad.onnx + AGC; speech prob > 0.5; start after 250 ms; 
 | `streaming_patch.py` | Chunk-aware Conformer patch (the chunk-model definition, also used for training) |
 | `batch_engine.py` | `BatchedEngine`: many streams, one encoder forward per tick (slot-pooled caches), plus `final_batch()` for padded batched finals. Identical text to `cache_engine` (\|Δlogp\| ≤ 2e-4) |
 | `transcribe_stream.py` | CLI: wav file, or live 16 kHz s16le PCM on stdin → JSON lines |
+| `twopass_stream.py` | `StreamSession`: turn-based streaming for voice dialogue on a shared `TwoPass`: speech_start / partial / pause / resume / blip / words / eou / final events, VAD hysteresis, continuation window, filler/backchannel flags, hotwords with display forms. Evaluation: `eval/dialog/`, `docs/dialog_turn_taking.md` |
 | `selftest.py` | Simulated calls (3 utterances joined with ~1 s pauses) → final WER, compute per partial/final, no-overlap check |
 
 ## Usage
@@ -59,7 +61,50 @@ for block in blocks:                 # float32 mono 16 kHz numpy arrays, any len
 print(tp.flush())                    # end of stream
 ```
 
-Options worth knowing:
+### Voice dialogue: `StreamSession`
+
+```python
+import sys; sys.path.insert(0, "service")
+from twopass import TwoPass, release_paths
+from twopass_stream import StreamSession
+
+tp = TwoPass(paths=release_paths("k5stt"), device="cuda", lm="beam")    # load once; sessions share it
+s = StreamSession(tp, eou_ms=400, pause_ms=200, lang="beam", speech_start_ms=96,
+                  hotwords=["Kaspi=каспи", "Halyk=халық"])              # "Written=spoken|spoken2": bias + display form
+for frame in mic_frames:                     # float32 mono 16 kHz, e.g. 20 ms frames
+    events = s.feed(frame)
+    if events and events[-1]["type"] == "eou":
+        events += s.poll()                   # the final, computed right after the end-of-turn event
+    for ev in events:
+        ...                                  # speech_start / partial / pause / resume / blip / words / eou / final
+s.flush()                                    # push-to-talk release: finalize now
+s.reset()                                    # barge-in / new turn (the audio clock keeps running)
+```
+
+Events (`t` = seconds of audio since the session started):
+
+| Event | When | Use |
+|---|---|---|
+| `speech_start` | VAD onset after `speech_start_ms` of speech | open a turn; pause the bot's audio as a *candidate* interruption |
+| `partial` | every chunk while in a turn | live captions: `text` = committed words, `tentative` = growing last word; `kind`, `filler_only` |
+| `pause` | first ~200 ms of silence (`pause_ms`) | `text`/`itn` = offline-quality decode of the turn so far: start the LLM speculatively |
+| `resume` | speech again after a pause, before the end of turn | the speculative reply may be stale (VAD only: breaths can do this) |
+| `blip` | VAD run too short to start or resume a turn | informational; the silence timer keeps running |
+| `words` | first real word (≥ 2 letters, not a filler) after `speech_start` / `resume` | the "speaker really said something" signal for barge-in / continuation decisions |
+| `eou` | `eou_ms` of silence | end of turn; `feed()` returns right after it, call `poll()` for the final |
+| `final` | after `eou`, `flush()` or `max_turn_s` | `text`, `itn` (digits, dates, money), `same_as_pause`, `filler_only` |
+
+Recommended dialogue settings: `eou_ms=400` (500 for a «patient» mode: ~1 WER point better, ~100 ms slower),
+`pause_ms=200`, `lang="beam"`. The live demo ran the VAD at `speech_start_ms=96, vad_thr=0.5, agc_max=30`; the
+candidate from the VAD study is `speech_start_ms=192, vad_thr=0.6, vad_thr_off=0.35, cont_ms=2000` (the code default
+of `speech_start_ms` is 192). Never use `agc_max=3`: it deletes quiet speech. Semantic early endpointing
+(`semantic=True`) gave no gain over a fixed wait and stays off. Details: `docs/dialog_turn_taking.md`.
+
+Threading: one session per dialogue, used from one thread; any number of sessions may share one `TwoPass` (model calls
+are serialized by a module lock).
+
+### Options worth knowing
+
 
 - `--lm kkru|kk|ru|beam|none`: KenLM with dev-tuned α/β from `lm/lm_weights.json`; `beam` = beam search without
   KenLM (recommended for live, segmented use: 10.3 vs 11.1 final WER on 100 simulated calls at a 0.4 s pause; hotwords
