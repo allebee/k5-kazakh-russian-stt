@@ -3,6 +3,10 @@
 Streaming speech recognition for **Kazakh, Russian and mixed Kazakh↔Russian (code-switched) speech**, with the code to
 run it, evaluate it and reproduce its training.
 
+> **Project status: concluded Oct 2026.** This repository (code and findings) and the Hugging Face model are the final
+> state; no further development is planned. Open ends are listed under [Limitations](#limitations); the full write-ups
+> are in [`docs/`](#documentation).
+
 - **Model:** a 600M Conformer-CTC fine-tuned from
   [GigaAM-Multilingual](https://huggingface.co/ai-sage/GigaAM-Multilingual) `large_ctc` on ~2,364 h of open data, with
   phone-line augmentation and kk↔ru mixes. Weights:
@@ -11,6 +15,9 @@ run it, evaluate it and reproduce its training.
 - **Two-pass streaming:** fast *partials* from a chunk-aware model on a cache-aware engine (a chunk every 320 or 640 ms),
   and at each pause a *final* from the full-context offline model + a Kazakh–Russian KenLM 4-gram + inverse text
   normalization (digits, dates, money). Hotwords, Silero VAD endpointing, bf16 final pass on CPU.
+- **Voice dialogue:** `StreamSession`, a turn-based streaming interface for speech-to-speech assistants
+  (speech_start / partial / pause / resume / eou / final events, plus `words` and `blip`), evaluated for VAD robustness
+  and end-of-turn detection.
 - **kk_tn:** a dependency-free Kazakh text normalizer (TN, written → spoken) and inverse normalizer (ITN, spoken →
   written, Kazakh and Russian).
 
@@ -135,6 +142,66 @@ tp.set_hotwords(["Ерболат"], 10)        # may change between segments
 More options (`--eou`, `--fp32-final`, `--bf16-partials`, `--no-itn`, `--threads`) and the batched multi-stream engine:
 [`service/README.md`](service/README.md).
 
+## Streaming API for voice dialogue: `StreamSession`
+
+[`service/twopass_stream.py`](service/twopass_stream.py) wraps the same two models for a speech-to-speech assistant
+(speech → STT → LLM → TTS). Sessions are turn-based and share one loaded `TwoPass`:
+
+```python
+import sys; sys.path.insert(0, "service")
+from twopass import TwoPass, release_paths
+from twopass_stream import StreamSession
+
+tp = TwoPass(paths=release_paths("k5stt"), device="cuda", lm="beam")   # load once per process (CPU works too)
+s = StreamSession(tp, eou_ms=400, pause_ms=200, lang="beam", speech_start_ms=96,
+                  hotwords=["Kaspi=каспи", "Halyk=халық"])             # "Written=spoken|spoken2"
+for frame in mic_frames:                    # float32 mono 16 kHz, any length (e.g. 20 ms)
+    events = s.feed(frame)
+    if events and events[-1]["type"] == "eou":
+        events += s.poll()                  # the final is computed right after the end-of-turn event
+    handle(events)
+s.flush()                                   # push-to-talk release: finalize now
+s.reset()                                   # barge-in / new turn
+```
+
+| Event | Meaning |
+|---|---|
+| `speech_start` | VAD onset (`t`) and when it was detected (`t_detect`) |
+| `partial` | every chunk in a turn: committed `text` (never rewritten) + `tentative` last word; `filler_only` for э / мм / иә / ага… |
+| `pause` | first ~200 ms of silence: `text` / `itn` is an offline-quality decode of the turn so far, to start the LLM speculatively |
+| `resume` | speech again after a pause, before the end of the turn |
+| `blip` | VAD speech too short to start or resume a turn (the silence timer keeps running) |
+| `words` | first real word (≥ 2 letters, not a filler) after `speech_start` / `resume`: the "speaker really said something" signal |
+| `eou` | end of turn after `eou_ms` of silence; `feed()` returns right after it, the final comes from `poll()` |
+| `final` | the turn's text: offline model + beam + hotwords + ITN (`text`, `itn`, `same_as_pause`, `forced`) |
+
+**Recommended dialogue settings:**
+
+- `eou_ms=400` (500 for a «patient» mode: ~1 WER point better, ~100 ms slower), `pause_ms=200`.
+- `lm="beam"` / `lang="beam"` for live use. KenLM **hurts** live, VAD-segmented decoding (final WER **10.3 vs 11.1**
+  with KenLM on 100 simulated calls at a 0.4 s pause) but helps on whole utterances (offline numbers above).
+- On GPU the final pass takes **~75 ms** per turn in real-time-paced use (cuDNN is disabled: it JIT-compiled kernels for
+  every new segment length, 300+ ms per final before). Speech end → final text ≈ 0.45 s with one session.
+- VAD: the live demo ran `speech_start_ms=96, vad_thr=0.5, agc_max=30`. The candidate from the VAD study is
+  `speech_start_ms=192, vad_thr=0.6, vad_thr_off=0.35, cont_ms=2000` (noise false starts −27% / −33%, WER neutral); it
+  was not confirmed end-to-end. The code default of `speech_start_ms` is 192. Never use `agc_max=3`: it deletes quiet
+  speech.
+- Use `words` / `filler_only`, not raw VAD events, to decide that the speaker interrupted: breaths always trigger the VAD,
+  but only 3–5% of them produce a `words` event.
+
+**End-of-turn evaluation** (986 pause events in 100 simulated dev calls; read speech, not real dialogue turns):
+
+- **A fixed 700 ms wait beats Smart Turn v3.2 as-is.** At 700 ms a fixed wait cuts 4.5 (ru) and 21 (kk) of every 100
+  sentences mid-way; Smart Turn cuts 12 (ru) and 22 (kk) at a ~610–635 ms mean wait, about what a fixed wait of the same
+  mean length gives (ru: 12 at 600 ms). Smart Turn calls 60–70% of mid-sentence pauses "complete".
+- **feanet (Russian) helps a little:** 7.9 vs 12.4 cuts per 100 at ~650 ms. It is useless for Kazakh (recall 2%).
+- **There is no Kazakh end-of-turn model.** Our Kazakh text heuristic (`looks_final`) only equals a fixed 700 ms wait, so
+  semantic endpointing stays off. A Kazakh Smart Turn fine-tune is estimated at ~1 day and 1–2 GPU hours (not done).
+- The base wait is the biggest lever: 400 ms cuts 57 (ru) / 83 (kk) sentences per 100, 700 ms 4.5 / 21. A dialogue
+  layer should wait ~700 ms by default and shorten it only for clearly complete turns.
+
+Details, tables and scripts: [`docs/dialog_turn_taking.md`](docs/dialog_turn_taking.md), [`eval/dialog/`](eval/dialog/).
+
 ## How the two-pass streaming works
 
 ```
@@ -207,14 +274,26 @@ python service/selftest.py --root k5stt --calls 20 --manifests my_dev.jsonl     
 ## Repository layout
 
 ```
-service/      two-pass streaming pipeline: TwoPass, cache-aware and batched engines, CLI, self-test
+service/      two-pass streaming pipeline: TwoPass, StreamSession (voice dialogue), cache-aware and batched engines, CLI, self-test
 kk_tn/        Kazakh TN / ITN package (pip-installable, own tests and NOTICE)
 eval/         eval-set preparation, transcription, scoring, LM tuning, streaming simulation, leak test, hotwords
+eval/dialog/  StreamSession evaluation: VAD noise/breath robustness, continuation races, end-of-turn models, LM A/B
 benchmarks/   open-model comparison, earlier-model baseline, CPU bf16, GPU latency and capacity
 training/     manifests, augmentation, GigaAM training wrapper, offline + streaming recipes, KenLM build
 scripts/      conversion to the Hugging Face format and the release end-to-end test
-docs/         results, data-licence inventory
+docs/         results, dialogue/turn-taking study, reports and research notes, data-licence inventory
 ```
+
+## Documentation
+
+| Document | Contents |
+|---|---|
+| [`docs/results.md`](docs/results.md) | all final numbers with CIs: open-model and v1 comparisons, ITN, streaming, latency, capacity, hotwords, live decoder choice |
+| [`docs/dialog_turn_taking.md`](docs/dialog_turn_taking.md) | StreamSession VAD study (hysteresis, breaths, continuation races) and end-of-turn models (Smart Turn, feanet, heuristic) |
+| [`docs/final_report_2026-10-08.md`](docs/final_report_2026-10-08.md) | one-page summary at the end of training |
+| [`docs/results_log_2026-10-08.md`](docs/results_log_2026-10-08.md) | the running results log: intermediate numbers, the withdrawn lookahead results, prototype history |
+| [`docs/research_2026-09.md`](docs/research_2026-09.md) | pre-project survey: open kk/ru speech data, licences, the field, contamination rules |
+| [`docs/LICENSES_DATA.md`](docs/LICENSES_DATA.md) | licence inventory of every data source |
 
 ## Limitations
 
@@ -230,8 +309,10 @@ docs/         results, data-licence inventory
 - **Test-set overlap:** KSC2 and FLEURS train splits were used in training, as they were for the GigaAM base. FLEURS
   barely changes with fine-tuning because GigaAM already trained on it. The LM text was decontaminated against FLEURS and
   FLORES dev/test.
-- Batched GPU capacity (N = 16–128 streams) has not been measured yet; the ~16 streams per H100 figure is for the
-  unbatched engine.
+- Batched GPU capacity (N = 16–128 streams) was not measured; the ~16 streams per H100 figure is for the unbatched
+  engine. CUDA graphs were not tried.
+- **Dialogue turn-taking** was evaluated on simulated calls built from read and segmented speech, not on logged
+  dialogue turns; there is no Kazakh end-of-turn model, and the candidate VAD settings were not confirmed end-to-end.
 
 ## Licences and attribution
 
@@ -307,6 +388,12 @@ FLoRes-200 (NLLB Team, 2022); Golos (Karpov et al., Interspeech 2021); the SOVA 
   на фразах без цифр K5 лучше (2.60 против 3.72).
 - **Поток:** финальный WER 9.03 против 8.84 офлайн (разница незначима); слова в partials появляются через 0.49 с
   (0.72 с без исправлений); финал ≈ 0.85 с после конца речи на CPU, ≈ 0.62 с на GPU.
+- **Голосовой диалог:** `StreamSession` (`service/twopass_stream.py`) — события speech_start / partial / pause /
+  resume / eou / final (+ words, blip). Рекомендуется `eou_ms=400` (500 — «терпеливый» режим), `pause_ms=200`,
+  `lang="beam"`: KenLM на коротких живых сегментах ухудшает WER (10.3 против 11.1), на целых фразах помогает.
+  Финальный проход на GPU ~75 мс. Фиксированное ожидание 700 мс лучше готового Smart Turn; feanet немного помогает
+  для русского; казахской модели конца реплики нет. Подробности: `docs/dialog_turn_taking.md`.
+- **Статус:** проект завершён в октябре 2026 г.; этот репозиторий и модель на Hugging Face — итоговое состояние.
 - **Ограничения:** partials без заглядывания вперёд заметно хуже финала; настоящий lookahead требует переобучения
   в стиле Emformer (прежние результаты с lookahead были некорректны и отозваны). Реальные записи колл-центра в обучении
   не использовались — проверьте на своих данных.
