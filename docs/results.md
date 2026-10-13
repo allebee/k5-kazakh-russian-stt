@@ -1,4 +1,4 @@
-# Results (measured 2026-10-07/08)
+# Results (measured 2026-10-07/08; §7: 2026-10-12/13)
 
 WER %, unless stated otherwise. All systems were scored on the same utterances with the same normalizer (lowercase,
 punctuation stripped, ё → е, **digits kept**; see `eval/README.md`). Bootstrap 95% CIs use 2,000 resamples over
@@ -133,3 +133,29 @@ Omnilingual CTC-1B 0.62, BuzzASR 1.37, kazakh-whisper-turbo 2.05, whisper-turbo 
 - recall of the target words **24% → 80%**; WER on those utterances 18.1 → 12.4;
 - other utterances 7.36 → 7.43, 0 distractor false alarms;
 - weight 20 over-biases (8.20 on other utterances, 10 false alarms).
+
+## 7. Live decoding for voice dialogue (2026-10-12/13)
+
+**Decoder for live, VAD-segmented finals.** 100 simulated dev calls through `StreamSession` at a 0.4 s end-of-utterance
+pause; identical on GPU fp16 and CPU fp32:
+
+| Final-pass decoder | Final WER |
+|---|---|
+| Beam search without KenLM (`lm="beam"` / `lang="beam"`) | **10.28** |
+| kkru KenLM | 11.1 |
+| Greedy | 10.1 |
+
+- On whole recordings at the default 0.5 s pause (`TwoPass`, `eval/dialog/twopass_lm_ab.py`) the decoders are equal:
+  kkru 9.17, beam 9.12, greedy 9.12. Offline, on whole utterances, KenLM still helps (FLEURS kk 9.28 → 9.00).
+- Why KenLM hurts short live segments is open; sentence-boundary scoring and bf16 precision were ruled out. Beam search
+  without KenLM keeps hotwords, so it is the recommended live decoder.
+- A 500 ms end-of-utterance pause («patient» mode) was ~1 WER point better than 400 ms and ~100 ms slower.
+
+**GPU latency.** cuDNN 9 JIT-compiles convolution kernels for every new input length (~160–200 ms each), and every
+streamed segment has a new length, so `TwoPass(device="cuda")` disables cuDNN: the final pass on a new length takes
+18–32 ms instead of 160–200 ms, a cache-engine chunk 14–17 ms instead of 65–73 ms. In real-time-paced dialogue the
+final pass went from 300+ ms to ~75 ms (mostly kernel-launch overhead, which CUDA graphs would cut; not done). Speech end → final text
+≈ 0.45 s with one session and 0.59 s with four (pause event at speech end + ~0.28 s, `eou` at + 0.384 s).
+
+**Turn-taking** (VAD hysteresis, breaths, continuation races, end-of-turn models): see
+[`dialog_turn_taking.md`](dialog_turn_taking.md).
