@@ -11,7 +11,7 @@ To reproduce the counts, run `python3 tests/acronym_evidence.py`.
 
 A suffix written after an acronym follows the sound the writer pronounces at its end. If the acronym is read as a word, it ends in its last consonant (АҚШ-тың). If it is read by letter names, it ends in a vowel (ТМД-ның).
 
-**What was counted.** For every suffixed form in `acronym_suffix_counts_cc100.tsv`, the first morpheme of the suffix was classified. Only the five cases on the user's list count: genitive, dative, locative, ablative and accusative. The classes are:
+**What was counted.** For every suffixed form in `acronym_suffix_counts_cc100.tsv`, the first morpheme of the suffix was classified. Only the five cases on the reviewer's list count: genitive, dative, locative, ablative and accusative. The classes are:
 - **Consonant-final:** the allomorph that the acronym's own last letter takes and a vowel does not.
   - After voiceless consonants and б в г д: -тың, -қа, -та, -тан, -ты.
   - After з ж р й л: -дың, -ды.
@@ -28,12 +28,12 @@ A suffix written after an acronym follows the sound the writer pronounces at its
 If an acronym ends in a vowel (or и/у), both readings end the same way, so suffixes cannot decide. These get letters by default.
 
 **Overrides.**
-- User rulings were kept:
+- Reviewer rulings were kept:
   - ҚР and ЖШС stay expanded.
   - АҚШ → ақыш.
   - ТМД and ҰБТ are letters.
   - БҰҰ, ЖОО, ЕО and ЕАЭО are letters, marked "needs ear check".
-- Twelve well-known state, region and agency names also stay expanded, as a formal default (coordinator decision): РФ, ҚХР, ІІМ, ҰҚК, ТЖМ, ДДСҰ, ЖІӨ, ШҚО, БҚО, СҚО, ОҚО, ЕҰУ.
+- Twelve well-known state, region and agency names also stay expanded, as a formal default (review decision): РФ, ҚХР, ІІМ, ҰҚК, ТЖМ, ДДСҰ, ЖІӨ, ШҚО, БҚО, СҚО, ОҚО, ЕҰУ.
   - For formal TTS text an expansion is safer and easier to understand, and it keeps the izafet genitive: "ШҚО әкімі" → "Шығыс Қазақстан облысының әкімі".
   - For the vowel-final ones, suffixes cannot tell letters from the expansion.
   - Their note reads "expanded (formal default; letters plausible, ear check)", followed by the counts. On evidence alone, all twelve would be letters.
@@ -60,11 +60,11 @@ The counts below are counted suffix tokens (the five cases). "suffixed" is all s
 
 | acronym | reading | expansion | cons-final | vowel-final | cons-final % | suffixed | decided by |
 |---|---|---|---:|---:|---:|---:|---|
-| АҚШ | ақыш | Америка Құрама Штаттары | 58560 | 849 | 99% | 61749 | user ruling; evidence agrees |
-| БАҚ | бақ | бұқаралық ақпарат құралдары | 12465 | 1315 | 90% | 18234 | user rule example; evidence agrees |
+| АҚШ | ақыш | Америка Құрама Штаттары | 58560 | 849 | 99% | 61749 | reviewer ruling; evidence agrees |
+| БАҚ | бақ | бұқаралық ақпарат құралдары | 12465 | 1315 | 90% | 18234 | reviewer rule example; evidence agrees |
 | ЖЭС | жэс | жылу электр станциясы | 255 | 74 | 78% | 562 | evidence |
-| АҚ | ақ | акционерлік қоғам | 2322 | 15123 | 13% | 22839 | user rule example; **evidence disagrees** |
-| СІМ | сім | Сыртқы істер министрлігі | 5 | 1 | 83% | 2012 | user rule example; evidence too thin |
+| АҚ | ақ | акционерлік қоғам | 2322 | 15123 | 13% | 22839 | reviewer rule example; **evidence disagrees** |
+| СІМ | сім | Сыртқы істер министрлігі | 5 | 1 | 83% | 2012 | reviewer rule example; evidence too thin |
 | ОАР | оар | Оңтүстік Африка Республикасы | 71 | 21 | 77% | 308 | evidence |
 | АЕК | аек | айлық есептік көрсеткіш | 845 | 134 | 86% | 1061 | evidence |
 | МӘМС | мәміс | міндетті әлеуметтік медициналық сақтандыру | 201 | 75 | 73% | 320 | evidence |
@@ -82,26 +82,26 @@ Four `keep` entries are read as written, and the evidence confirms the word read
 
 ## Conflicts and ear checks
 
-- **АҚ:** the evidence says letters (13% consonant-final). The user's rule-3 example says ақ, so ақ is kept.
+- **АҚ:** the evidence says letters (13% consonant-final). The reviewer's rule-3 example says ақ, so ақ is kept.
   - The likely cause is the expansion. Its head noun қоғам ends in м, so suffixes that follow it (АҚ-ның, -да, -ға, -нан) look vowel-final.
   - The consonant-final forms (АҚ-тың 1,649, -қа, -та, -ты) still occur 2,322 times.
-- **СІМ:** after м, -нің/-де/-ге are neutral (1,737 tokens). Only 6 tokens are counted (5 consonant-final, 1 vowel-final), which is too few. The user's example сім is kept.
-- **No reference case contradicts the evidence,** so `disputes.tsv` is unchanged. ҚР and ЖШС would be letters on evidence alone (they have no vowel), but the user's ruling expands them.
+- **СІМ:** after м, -нің/-де/-ге are neutral (1,737 tokens). Only 6 tokens are counted (5 consonant-final, 1 vowel-final), which is too few. The reviewer's example сім is kept.
+- **No reference case contradicts the evidence,** so `disputes.tsv` is unchanged. ҚР and ЖШС would be letters on evidence alone (they have no vowel), but the reviewer's ruling expands them.
 - **Ear checks** for the TTS listening test (the `note` column says "needs ear check", or "ear check" for the formal defaults):
-  - БҰҰ, ЖОО, ЕО, ЕАЭО: user ruling.
+  - БҰҰ, ЖОО, ЕО, ЕАЭО: reviewer ruling.
   - The 12 formal-default expansions (РФ … ЕҰУ): expanded, though letters are plausible.
   - АЕК (word): the expansion's head көрсеткіш takes the same -тен/-ке/-ті/-тің, so expansion-driven suffixes look identical.
   - МӘМС (word, 73%): reading мәміс, with an epenthetic і because word-final "мс" is not Kazakh. The alternative is мәмс.
   - Borderline, so letters: АЭС 67%, СЭС 65%, ГЭС 58%, ТҮКШ 62%, ПИК 68%.
   - МЕМСТ (keep, 68%).
-  - If plural and instrumental suffixes were also counted (they are not on the user's list), АЭС (72%), СЭС (76%) and ПИК (80%) would become word. No current word decision would drop below 70%.
+  - If plural and instrumental suffixes were also counted (they are not on the reviewer's list), АЭС (72%), СЭС (76%) and ПИК (80%) would become word. No current word decision would drop below 70%.
 
 ## Caveats
 
 - Writers often inflect an acronym as its expansion's head noun: ЕО-тың from Одақтың, АЕК-тен from көрсеткіштен. After-possessive forms are excluded. When the head noun ends like the word reading, the two cannot be told apart.
 - Russian letter names that end in a consonant (эс, эм, эн, эр, эф) also give consonant-final suffixes. That is why ЖСН (86%), КХДР (79%), ГФР (74%) and КТС (88%) have no vowel but still show consonant-final suffixes.
   - So for С/Р/М-final words (ЖЭС, ОАР, МӘМС), the evidence fits "word" and Russian-style letters equally well.
-  - The user's convention uses Kazakh letter names, which end in ы/і, so the rule picks word.
+  - The reviewer's convention uses Kazakh letter names, which end in ы/і, so the rule picks word.
 
 ## Other fixes
 

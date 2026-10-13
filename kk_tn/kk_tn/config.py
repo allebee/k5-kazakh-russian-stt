@@ -1,4 +1,4 @@
-"""Reading conventions. Defaults follow the user's decisions of 2026-10-07 (review page §6)."""
+"""Reading conventions. Defaults follow the native-speaker reviewer's decisions of 2026-10-07 (review page §6)."""
 from __future__ import annotations
 
 from dataclasses import dataclass

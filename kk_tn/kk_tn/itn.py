@@ -3,7 +3,7 @@
 The number-word lexicon is generated from the same suffix engine the TN side uses
 (morph.inflect), so every inflected form TN can produce, ITN can read back.
 
-Output style (user decisions of 2026-10-07): "1500 теңге" (no thousands space below
+Output style (reviewer decisions of 2026-10-07): "1500 теңге" (no thousands space below
 10 000), "5-сынып", "2024 жылы", "15 наурыз", "25%-ға", "сағат 15:30-да".
 """
 from __future__ import annotations

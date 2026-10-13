@@ -69,7 +69,7 @@ id	direction	lang	written	expected_spoken	category	note
 68	TN	kk	10 500 адам	он мың бес жүз адам	cardinal_big	
 69	TN	kk	100 адам	жүз адам	cardinal_big	alt: бір жүз адам; бір жүз convention
 70	TN	kk	1000 теңге	мың теңге	cardinal_big	alt: бір мың теңге
-71	TN	kk	0,5	жарты	decimal	user ruling 2026-10-07: bare 0,5 → жарты
+71	TN	kk	0,5	жарты	decimal	reviewer ruling 2026-10-07: bare 0,5 → жарты
 72	TN	kk	2,75	екі бүтін жүзден жетпіс бес	decimal	
 73	TN	kk	1,05	бір бүтін жүзден бес	decimal	
 74	TN	kk	36,6°	отыз алты бүтін оннан алты градус	decimal	
@@ -80,14 +80,14 @@ id	direction	lang	written	expected_spoken	category	note
 79	TN	kk	25%-ға өсті	жиырма бес пайызға өсті	percent	suffix after symbol
 80	TN	kk	3%-дан	үш пайыздан	percent	
 81	TN	kk	12,5%	он екі жарым пайыз	percent	
-82	TN	kk	1 500 ₸	мың бес жүз теңге	money	user ruling 2026-10-07: money drops бір
-83	TN	kk	1 500 ₸-ге	мың бес жүз теңгеге	money	user ruling 2026-10-07: money drops бір
+82	TN	kk	1 500 ₸	мың бес жүз теңге	money	reviewer ruling 2026-10-07: money drops бір
+83	TN	kk	1 500 ₸-ге	мың бес жүз теңгеге	money	reviewer ruling 2026-10-07: money drops бір
 84	TN	kk	250 тг	екі жүз елу теңге	money	тг abbreviation
 85	TN	kk	$100	жүз доллар	money	symbol before number
 86	TN	kk	100$-ға	жүз долларға	money	
 87	TN	kk	€20	жиырма еуро	money	
 88	TN	kk	5 млрд ₸	бес миллиард теңге	money	
-89	TN	kk	1 500,50 ₸	мың бес жүз теңге елу тиын	money	user ruling 2026-10-07: money drops бір
+89	TN	kk	1 500,50 ₸	мың бес жүз теңге елу тиын	money	reviewer ruling 2026-10-07: money drops бір
 90	TN	kk	$1,5 млрд	бір жарым миллиард доллар	money	alt: бір бүтін оннан бес миллиард доллар
 91	TN	kk	50 ₽	елу рубль	money	
 92	TN	kk	сағат 15:30-да	сағат он бес отызда	time	
@@ -105,8 +105,8 @@ id	direction	lang	written	expected_spoken	category	note
 104	TN	kk	10-15%	он-он бес пайыз	range	
 105	TN	kk	2-3 мин	екі-үш минут	range	
 106	TN	kk	3:0 есебімен	үш нөл есебімен	score	alt: үш де нөл есебімен; colon = score, not time
-107	TN	kk	5 км	бес километр	measure	user ruling 2026-10-07: километр default; шақырым also correct (alt: бес шақырым)
-108	TN	kk	80 км/сағ	сағатына сексен километр	measure	user ruling 2026-10-07: километр default (alt: сағатына сексен шақырым)
+107	TN	kk	5 км	бес километр	measure	reviewer ruling 2026-10-07: километр default; шақырым also correct (alt: бес шақырым)
+108	TN	kk	80 км/сағ	сағатына сексен километр	measure	reviewer ruling 2026-10-07: километр default (alt: сағатына сексен шақырым)
 109	TN	kk	-15°C	минус он бес градус	measure	
 110	TN	kk	2,5 кг	екі жарым килограмм	measure	alt: екі бүтін оннан бес килограмм
 111	TN	kk	120 м²	жүз жиырма шаршы метр	measure	
@@ -118,7 +118,7 @@ id	direction	lang	written	expected_spoken	category	note
 117	TN	kk	БҰҰ-ның	Біріккен Ұлттар Ұйымының	abbrev	
 118	TN	kk	ЖОО-ға түсті	жоғары оқу орнына түсті	abbrev	орын → орны + на
 119	TN	kk	ЖШС «Алем»	жауапкершілігі шектеулі серіктестік «Алем»	abbrev	alt: же-ше-эс «Алем»; legal-form acronyms are often read letter by letter
-120	TN	kk	ҰБТ нәтижесі	ұ-бы-ты нәтижесі	abbrev	user ruling 2026-10-07: bare acronym spelled ы-style
+120	TN	kk	ҰБТ нәтижесі	ұ-бы-ты нәтижесі	abbrev	reviewer ruling 2026-10-07: bare acronym spelled ы-style
 121	TN	kk	т.б.	тағы басқа	abbrev	
 122	TN	kk	т.с.с.	тағы сол сияқты	abbrev	
 123	TN	kk	Алматы қ.	Алматы қаласы	abbrev	
@@ -133,24 +133,24 @@ id	direction	lang	written	expected_spoken	category	note
 132	TN	kk	www.gov.kz	дабл-ю дабл-ю дабл-ю нүкте гов нүкте кей зет	latin	
 133	TN	kk	COVID-19	ковид он тоғыз	latin	
 134	TN	kk	BMW X5	бэ-эм-вэ икс бес	latin	Russian-style letter names are the KZ norm
-135	TN	kk	Wi-Fi	вай-фай	latin	user ruling 2026-10-07
+135	TN	kk	Wi-Fi	вай-фай	latin	reviewer ruling 2026-10-07
 136	TN	kk	5G желісі	бес джи желісі	latin	alt: файв джи желісі
 137	TN	kk	Qazaqstan Respýblıkasy	Қазақстан Республикасы	latin_kazakh	new Latin-script Kazakh: transliterate, don't spell out
 138	TN	mixed	Мен 5 тысяч төледім	мен пять тысяч төледім	ru_in_kk	number language follows the Russian noun
 139	TN	mixed	Бүгін 2 пары бар	бүгін две пары бар	ru_in_kk	Russian gender agreement (две, fem.)
 140	TN	mixed	3 часа күттім	три часа күттім	ru_in_kk	
 141	TN	mixed	сағат 3-те встреча бар	сағат үште встреча бар	ru_in_kk	Kazakh number + Kazakh suffix, Russian noun later
-142	TN	mixed	1-й курста оқиды	бірінші курста оқиды	ru_in_kk	user ruling 2026-10-07
+142	TN	mixed	1-й курста оқиды	бірінші курста оқиды	ru_in_kk	reviewer ruling 2026-10-07
 143	TN	mixed	Ол «спасибо» деді	ол «спасибо» деді	ru_in_kk	pass through; TTS must use Russian phonology
 144	TN	mixed	т.е. бұл дұрыс	то есть бұл дұрыс	ru_in_kk	Russian abbreviation in Kazakh text
 145	TN	mixed	100 процент сенемін	жүз процент сенемін	ru_in_kk	alt: сто процентов сенемін; Russian loanword used inside Kazakh grammar
 146	ITN	kk	2024 жылы	екі мың жиырма төртінші жылы	itn_year	
-147	ITN	kk	1500 теңге	бір мың бес жүз теңге	itn_money	user decision d4: digits, no thousands space, the word теңге
+147	ITN	kk	1500 теңге	бір мың бес жүз теңге	itn_money	reviewer decision d4: digits, no thousands space, the word теңге
 148	ITN	kk	1,5 млн теңге	бір жарым миллион теңге	itn_money	жарым → ,5
 149	ITN	kk	15 наурыз	он бесінші наурыз	itn_date	
 150	ITN	kk	наурыздың 15-і	наурыздың он бесі	itn_date	possessive date → digit + suffix
 151	ITN	kk	3-сыныпқа	үшінші сыныпқа	itn_ordinal	"ordinal + noun → ""3-"" + noun"
-152	ITN	kk	5-орын	бесінші орын	itn_ordinal	"user decision d5: ""5-сынып"" style"
+152	ITN	kk	5-орын	бесінші орын	itn_ordinal	"reviewer decision d5: ""5-сынып"" style"
 153	ITN	kk	25%-ға	жиырма бес пайызға	itn_percent	suffix kept after %
 154	ITN	kk	8 777 000 11 22	сегіз жеті жүз жетпіс жеті нөл нөл нөл он бір жиырма екі	itn_phone	group by the spoken chunks
 155	ITN	kk	сағат 15:30-да	сағат он бес отызда	itn_time	

@@ -3,18 +3,18 @@
     python3 tests/acronym_evidence.py            # evidence table + where the lexicon departs from the rule
     python3 tests/acronym_evidence.py --review   # regenerate tests/data/abbrev_review.tsv (row order asserted)
 
-Method (user rules of 2026-10-07, resmihat.kz "Қысқартылған сөздерді (аббревиатураларды) қолдану"):
+Method (reviewer rules of 2026-10-07, resmihat.kz "Қысқартылған сөздерді (аббревиатураларды) қолдану"):
 a case suffix written after an acronym follows the sound the writer pronounces at its end.
 For every suffix counted in tests/data/acronym_suffix_counts_cc100.tsv we take its FIRST morpheme
 ("АҚШ-тағы" counts as locative -та) and compare two readings of the acronym:
   word    = read as one word, ending in its last consonant (АҚШ → ақыш, БАҚ → бақ);
   letters = letter names, consonant + ы/і, so it ends in a vowel (ТМД → ты-мы-ды).
-Only the five cases the user listed are counted: genitive, dative, locative, ablative, accusative.
+Only the five cases the reviewer listed are counted: genitive, dative, locative, ablative, accusative.
   consonant-final (C): the allomorph the acronym's own last consonant takes and a vowel does not:
                        after voiceless consonants and б в г д: -тың/-тің, -қа/-ке, -та/-те, -тан/-тен,
                        -ты/-ті (б в г д also -дың, -ды); after з ж р й л: -дың/-дің, -ды/-ді;
                        after м н ң: -ды/-ді;
-  vowel-final (V):     -ның/-нің, -ға/-ге, -да/-де, -дан/-ден, -ны/-ні, and -нан/-нен (user's list);
+  vowel-final (V):     -ның/-нің, -ға/-ге, -да/-де, -дан/-ден, -ны/-ні, and -нан/-нен (reviewer's list);
   neutral:             an allomorph that the acronym's own last consonant takes too, so both readings
                        give it (after м/н/ң: -ның, -ға, -да, -нан; after з/ж/р/й/л: -ға, -да, -дан).
 Not counted: the after-possessive forms -на/-не, -нда/-нде, -н (they follow the expansion, as in
@@ -23,7 +23,7 @@ Not counted: the after-possessive forms -на/-не, -нда/-нде, -н (they 
 -лық, -сыз, the abbreviated genitive -ң, and hyphenated compounds ("АИТВ-инфекциясы").
 Rule decision: "word" only if the acronym has a vowel and C / (C + V) >= 70% over at least 10 counted
 tokens; otherwise letters. An acronym ending in a vowel (or и/у) ends the same way in both readings,
-so its suffixes cannot decide: letters by default. User rulings and keep entries are listed in the lexicon.
+so its suffixes cannot decide: letters by default. Reviewer rulings and keep entries are listed in the lexicon.
 """
 from __future__ import annotations
 
@@ -120,10 +120,10 @@ def token_class(acr: str, suffix: str) -> str:
     if follows == {"PRON"}:
         return "izafet"
     x = final_class(acr)
-    vowel_ok = "V" in follows or surface in ("нан", "нен")   # -нан/-нен: vowel-final per user's list
+    vowel_ok = "V" in follows or surface in ("нан", "нен")   # -нан/-нен: vowel-final per reviewer's list
     if x in ("V", "G"):
         return "V" if vowel_ok else "C"
-    # б в г д take the voiceless set (user rule); a voiced reading of them gives -дың/-ды
+    # б в г д take the voiceless set (reviewer rule); a voiced reading of them gives -дың/-ды
     word_ok = x in follows or (acr[-1].lower() in "бвгд" and surface in ("дың", "дің", "ды", "ді"))
     if word_ok and vowel_ok:
         return "neutral"
@@ -159,7 +159,7 @@ def evidence(acr: str, counts: Counter) -> dict:
 
 
 def rule_decision(acr: str, ev: dict) -> tuple[str, str]:
-    """(mode, reason) from the evidence alone, before user rulings."""
+    """(mode, reason) from the evidence alone, before reviewer rulings."""
     if final_class(acr) in ("V", "G"):
         return "spell", "vowel-final"
     if not has_vowel(acr):
@@ -241,7 +241,7 @@ def main(argv: list[str]) -> int:
               f"\t{ev['mismatch']}\t{ev['other']}\t{ev['suffixed']}")
         if cur != mode:
             departs.append(f"  {a}: lexicon {cur}, rule {mode} ({why}). {lex[a].note if a in lex else ''}")
-    print("\nlexicon departs from the evidence rule (user rulings, keep entries):")
+    print("\nlexicon departs from the evidence rule (reviewer rulings, keep entries):")
     print("\n".join(departs) or "  none")
     return 0
 

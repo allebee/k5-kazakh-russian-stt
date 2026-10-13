@@ -4,7 +4,7 @@
 
 Comparison is lenient: lowercase, punctuation and hyphens dropped, whitespace collapsed.
 Cases listed in tests/data/disputes.tsv are reported separately: the rule follows the
-user's convention and the case contradicts another approved case (or vice versa).
+reviewer's convention and the case contradicts another approved case (or vice versa).
 """
 from __future__ import annotations
 

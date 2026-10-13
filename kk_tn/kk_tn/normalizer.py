@@ -447,7 +447,7 @@ class Normalizer:
         policy = e.mode if cfg.abbrev_policy == "lexicon" else cfg.abbrev_policy
         morphs = self._morphs(m["asuf"])
         if m["asuf"]:
-            # user rule: with a suffix, always expand (when there is a real expansion)
+            # reviewer rule: with a suffix, always expand (when there is a real expansion)
             policy = "expand" if e.expansion != e.abbr else "keep"
             if morphs is None or ("LYK" in morphs and e.poss3):
                 policy = "keep"  # suffix we can't rebuild: leave "ХХХ-suffix" for the TTS

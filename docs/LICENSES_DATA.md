@@ -1,5 +1,5 @@
-<!-- Reproduced verbatim from LICENSES.md in the Hugging Face model repo alibiserikbay/k5-kazakh-russian-stt.
-     "The user" = the model owner. The code in this GitHub repository is Apache-2.0 (see LICENSE and NOTICE). -->
+<!-- Reproduced from LICENSES.md in the Hugging Face model repo alibiserikbay/k5-kazakh-russian-stt.
+     The code in this GitHub repository is Apache-2.0 (see LICENSE and NOTICE). -->
 
 # Licence inventory for `k5-kazakh-russian-stt` (checked 2026-10-08)
 Every item below was checked against its primary source. This is analysis, not legal advice.
@@ -18,14 +18,14 @@ Every item below was checked against its primary source. This is analysis, not l
 | MUSAN noise, OpenSLR 17 | augmentation (noise) | CC BY 4.0 | openslr.org/17 | attribution |
 | CC-100 kk / ru (statmt) | LM text | No IP claimed by the corpus makers. The underlying web text keeps its copyright, and the Common Crawl Terms of Use apply | data.statmt.org/cc-100 · commoncrawl.org/terms-of-use | no licence grant |
 | KenLM (tool) | building the LM binaries | LGPL 2.1+ for the code; nothing is said about output files | github.com/kpu/kenlm | n/a to the output (**UNCERTAIN**, not stated) |
-| VAD model `vad.onnx` | endpointing in deploy/ | **MIT**: Silero VAD (snakers4/silero-vad). The user confirmed the origin (it was shipped in their earlier `kazakh-russian-mixed-stt` release) | github.com/snakers4/silero-vad | permissive |
+| VAD model `vad.onnx` | endpointing in deploy/ | **MIT**: Silero VAD (snakers4/silero-vad). Same file as shipped in our earlier `kazakh-russian-mixed-stt` release | github.com/snakers4/silero-vad | permissive |
 | kk_tn (our ITN/TN package) | deploy/ | Apache-2.0 (ours) | – | permissive |
 | deploy/ code (two-pass, cache/batch engines) | deploy/ | ours; proposed Apache-2.0 | – | permissive |
 
 **None of the inputs are non-commercial.** The share-alike inputs are **KSD**, **Golos** and the **FLEURS transcripts (FLoRes)**.
 
-## Conclusion: what each released part can carry
-| Released part | Contains | Conservative licence (recommended for a public release) | Permissive option and its risk |
+## What each released part carries
+| Released part | Contains | Licence used | Permissive option and its risk |
 |---|---|---|---|
 | Offline model weights (`model.safetensors`) | fine-tuned on KSD, Golos, FLEURS, KSC2, SOVA, RuLS | **CC BY-SA 4.0**, keeping the MIT notice for the base weights | MIT/Apache-2.0. The common view is that weights are not an "adaptation" of audio. The risk is that KazNU or SberDevices disagree; Golos §6 would then terminate our licence (30-day cure) |
 | Streaming model weights (`streaming/`) | same data | **CC BY-SA 4.0** | same as above |
@@ -34,19 +34,11 @@ Every item below was checked against its primary source. This is analysis, not l
 | `deploy/` and `deploy/kk_tn/` | our code | **Apache-2.0** | – |
 | `vad/vad.onnx` | Silero VAD | **MIT** (Silero Team) | – |
 
-**Decision (user, 2026-10-08):** **CC BY-SA 4.0** for weights and KenLM files (`cc-by-sa-4.0`). Code stays
-Apache-2.0, `modeling_gigaam.py` stays MIT (modified), and the VAD is Silero VAD (MIT).
+**Licence:** **CC BY-SA 4.0** for the weights and KenLM files (`cc-by-sa-4.0`). Code is Apache-2.0, `modeling_gigaam.py` stays MIT (modified), and the VAD is Silero VAD (MIT).
 
-**Recommendation (as given before the decision):**
-- **Licence field for the private review release:** `cc-by-sa-4.0` for weights and LMs.
-- **Mixed licensing:** the README lists the per-component licences (code Apache-2.0, `modeling_gigaam.py` MIT).
-- **Choices left to the user before going public:**
-  - keep CC BY-SA 4.0 for everything (simplest and safest), or
-  - rebuild the LMs without SA transcripts and decide separately on the weights.
-- **If a permissive weights licence matters commercially:** the clean route is to retrain without KSD and Golos.
-  That costs most of the Russian crowd data plus ~554 h of Kazakh.
+**Why share-alike:** the training data includes KSD (CC BY-SA 3.0), Golos and FLoRes-200 transcripts (CC BY-SA 4.0). A permissive weights licence would need retraining without the share-alike sources.
 
-## Required attributions (go in the model card)
+## Required attributions
 - **KSC2:**
   - ISSAI's statement with DOI 10.48342/m90y-aj02 and CC BY 4.0 (copy the wording from issai.nu.edu.kz/kz-speech-corpus/).
   - Cite Mussakhojayeva et al., Interspeech 2022. Credit KazakhTTS2, LREC 2022 (optional).
