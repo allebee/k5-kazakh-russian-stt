@@ -33,14 +33,15 @@ This is the recipe that produced the released weights. It was run once, on one H
 **Streaming (partial) model** (`train_streaming.sh`, "stage C v1"): initialised from the selected offline checkpoint,
 1,500 steps at LR 5e-5 with `streaming_patch` (dynamic chunks of 160/320/640/1280 ms, full context with p = 0.15,
 4 s of left context, **no lookahead**). A longer variant with KD from the offline model, sampled lookahead, EMA and
-more Russian (`KD_TEACHER`, `KD_WEIGHT`, `KD_GATE`, `TRAIN_LOOKAHEADS` in `train_wrapper.py`) was no better at R = 0, and
-its lookahead results turned out to be leaky, so it is not released.
+more Russian (`KD_TEACHER`, `KD_WEIGHT`, `KD_GATE`, `TRAIN_LOOKAHEADS` in `train_wrapper.py`; its data mix:
+`prep_c2_manifest.py`) was no better at R = 0, and its lookahead results turned out to be leaky, so it is not released.
 
 **Language models** (`lm/build_lm.sh`): KenLM 4-grams (pruning 0 0 1 1, 8-bit trie) for kk (CC-100 kk + kk transcripts),
 ru (ru transcripts + the first ~8 GiB of CC-100 ru) and kkru (both), decontaminated against FLEURS dev/test and FLORES-200
 dev/devtest by word 8-gram overlap. α/β tuned on dev with `eval/lm_eval.py`: kk (0.2, 0.0), ru (0.2, −1.0),
-kkru (0.2, 0.0). An LM trained on kk_tn-verbalised text (numbers kept in spoken form) was tested and was neutral, so it is
-not used.
+kkru (0.2, 0.0). An LM trained on kk_tn-verbalised text (numbers kept in spoken form; `lm/lm_text_tn.py`,
+`lm/lm_tn_ab.py`) was tested and was neutral, so it is not used. For live, VAD-segmented decoding, beam search without
+KenLM is better than any LM (see `docs/results.md` §7).
 
 ## Workspace layout
 
