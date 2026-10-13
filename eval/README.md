@@ -34,6 +34,8 @@ penalised there. We therefore report three views where it matters:
 | `stream_engine_sim.py`, `ep_summary.py` | two-pass simulation on "calls" (3 utterances joined by ~1 s pauses): partial lag and rewrites, final WER vs offline on the same audio, final latency; paired bootstrap CI of final − offline |
 | `honest_la_eval.py` | honest (cache-engine right context) vs leaky (single-pass mask) lookahead, plus a direct leak test |
 | `hotword_test.py` | hotword recall on rare words (not in the LM unigrams), cost on other utterances, distractor false alarms |
+| `streaming_sim.py` | early streaming baselines with the offline model and no retraining: (A) buffered CTC with word-overlap merging, (B) re-decoding the utterance so far; superseded by the chunk model + cache engine |
+| `dialog/` | `StreamSession` (voice dialogue) evaluation: dialogue-style simulated calls, breaths, noise false starts, continuation races, end-of-turn models (Smart Turn, feanet, heuristic), live decoder A/B, concurrent GPU sessions. Write-up: `docs/dialog_turn_taking.md` |
 
 ## Reproducing the headline numbers
 
@@ -65,6 +67,17 @@ the `gigaam` package (training `.ckpt` files: `C_CKPT` = streaming model, `F_CKP
 `$K5_STT_ROOT/runs/`). With only the released HF weights, use `run_gigaam.py`, `service/selftest.py --root` and
 `service/transcribe_stream.py`; `scripts/convert_to_hf.py` documents the key mapping between the two formats
 (`model.` + GigaAM state-dict key).
+
+**Dialogue evaluation** (`eval/dialog/`, CPU; `K5_STT_MODEL_DIR` = downloaded model repo, dev sets from `make_dev_sets.py`):
+
+```bash
+CALLS=100 PROCS=16 THREADS=2 python eval/dialog/stream_session_test.py ss.json
+BREATH_DB=-35 CONFIGS='{"old": {"speech_start_ms": 96, "lang": "beam"}, "cand": {"speech_start_ms": 192, "vad_thr": 0.6, "vad_thr_off": 0.35, "cont_ms": 2000, "lang": "beam"}}' \
+  python eval/dialog/breath_dialog_test.py breath.json
+EOU_MS=800 python eval/dialog/turn_eval.py collect pauses.jsonl
+# SMART_TURN = Pipecat Smart Turn v3.2 CPU int8 .onnx; FEANET = a local copy of feanet/eou-detector-russian
+SMART_TURN=models/turn/smart-turn-v3/<v3.2 cpu>.onnx FEANET=models/turn/feanet-eou-ru python eval/dialog/turn_eval.py score pauses.jsonl turn_eval.json
+```
 
 **Lesson learnt:** run a leak test before reporting any streaming number with lookahead (`honest_la_eval.py`: logits of
 the first k chunks from the full audio vs from audio cut at chunk end + R). Our earlier single-pass lookahead mask leaked
