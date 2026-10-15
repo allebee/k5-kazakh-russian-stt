@@ -97,3 +97,18 @@ Notes:
 - `train_wrapper.py` also has a train-mode fix: `gigaam.load_model()` returns the model in eval mode, and Lightning ≥ 2.2
   keeps submodule modes, so without it the encoder trains in eval mode (no activation checkpointing, no dynamic chunks).
 - Our training runs used torch 2.10 with CUDA 12.8 and GigaAM's `[train]` extras.
+
+## Continue fine-tuning from the released weights
+The training checkpoints (GigaAM `.ckpt`) are not stored anywhere. The released weights on Hugging Face are the same tensors in HF format, so a training checkpoint can be rebuilt:
+
+1. `python scripts/hf_to_gigaam_ckpt.py offline` writes `$K5_STT_ROOT/runs/full_multilingual_large_ctc/final_a1.00.ckpt`.
+   - It takes the base GigaAM-Multilingual `large_ctc` checkpoint (for `cfg` and the key layout), swaps in our weights after a strict key and shape check, and saves.
+   - Use `streaming` for the chunk-aware model.
+   - Optional check: set `K5_CHECK_WAV=some.wav` to load the rebuilt checkpoint and transcribe that file.
+2. Build manifests for your new data with `build_manifests.py` (same TSV format: `path<TAB>text<TAB>duration`). Mix in some of the original data (replay) to limit forgetting; we used 30 % replay of data the base had already seen.
+3. Train. Either point `train_offline.sh` at the rebuilt checkpoint (link it into `$GIGAAM_DIR/train_utils/` and pass it as `--model_name`, as `train_streaming.sh` does with `STAGE_INIT`), or run `train_wrapper.py` directly.
+   - Start with a low LR (≈ 1–3e-5).
+   - Select on dev sets only.
+4. Re-export with `scripts/convert_to_hf.py`.
+
+Note: `hf_to_gigaam_ckpt.py` was written after the training server was decommissioned. It follows the exact key mapping of `convert_to_hf.py` but has not been run end to end yet; run it once and check the transcript.
